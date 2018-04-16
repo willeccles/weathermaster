@@ -51,6 +51,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		}
 
 		map.setMyLocationEnabled(true);
+		map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 	}
 
 	@Override
@@ -79,5 +80,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 				break;
 			}
 		}
+
+		mapView.getMapAsync(this);
 	}
 }
