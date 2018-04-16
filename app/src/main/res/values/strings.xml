@@ -3,4 +3,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_permission_dialog_message">You\'ll need to allow us access to your location in order to use the map.</string>
+    <string name="no_permission_dialog_title">Permission Required</string>
+    <string name="ok">OK</string>
 </resources>
