@@ -14,16 +14,38 @@ public class DetailActivity extends AppCompatActivity {
 	public static final String TYPE = "type";
 	public static final int CURRENT = 0;
 	public static final int FORECAST = 1;
+	public static String LOCATION = "loc";
+	public static String STATUS = "status";
+	public static String TEMP = "temp";
+	public static String HIGH = "high_temp";
+	public static String LOW = "low_temp";
 	private boolean isFavorite = false;
+	private String locationName = "Details";
+	private String weatherStatus = "STATUS";
+	private int weatherTemp = 0;
+	private int weatherHigh = 0;
+	private int weatherLow = 0;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_detail);
+
+		// determine whether or not the location is a favorite
 		isFavorite = getIntent().getBooleanExtra("isFav", false);
+
+		// get the weather stuff ready
+		locationName = getIntent().getStringExtra(LOCATION);
+		weatherStatus = getIntent().getStringExtra(STATUS);
+		weatherTemp = getIntent().getIntExtra(TEMP, -2147483648);
+		weatherHigh = getIntent().getIntExtra(HIGH, -2147483648);
+		weatherLow = getIntent().getIntExtra(LOW, -2147483648);
+
+		// get what kind of thing it is (forecast or current)
 		int type = getIntent().getIntExtra(TYPE, CURRENT);
+
 		Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-		myToolbar.setTitle(type==1?"Forecast":"Current Weather");
+		myToolbar.setTitle(locationName);
 		setSupportActionBar(myToolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 	}

@@ -12,26 +12,24 @@ import android.view.ViewGroup;
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link CurrentWeatherFragment.OnFragmentInteractionListener} interface
+ * {@link ForecastFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link CurrentWeatherFragment#newInstance} factory method to
+ * Use the {@link ForecastFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class CurrentWeatherFragment extends Fragment {
+public class ForecastFragment extends Fragment {
 	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-	public static final String ARG_PARAM_STATUS = "param1";
-	public static final String ARG_PARAM_TEMP = "param2";
-	public static final String ARG_PARAM_HIGH = "param3";
-	public static final String ARG_PARAM_LOW = "param4";
+	private static final String ARG_PARAM_DAYS = "param1";
+	private static final String ARG_PARAM_STATUSES = "param2";
+	private static final String ARG_PARAM_TEMPS = "param3";
 
-	private String paramStatus;
-	private int paramTemp;
-	private int paramHigh;
-	private int paramLow;
+	private String[] paramDays;
+	private String[] paramStatuses;
+	private int[] paramTemps;
 
 	private OnFragmentInteractionListener mListener;
 
-	public CurrentWeatherFragment() {
+	public ForecastFragment() {
 		// Required empty public constructor
 	}
 
@@ -39,19 +37,17 @@ public class CurrentWeatherFragment extends Fragment {
 	 * Use this factory method to create a new instance of
 	 * this fragment using the provided parameters.
 	 *
-	 * @param status The status of the weather (raining, snowing, etc)
-	 * @param temp The current temperature.
-	 * @param high The high temperature of the day.
-	 * @param low The low temperature for the day.
-	 * @return A new instance of fragment CurrentWeatherFragment.
+	 * @param days The list of day names.
+	 * @param statuses The list of statuses (for each day).
+	 * @param temps The list of temps, formatted as: {temp, high, low, temp2, high2, low2, etc.}
+	 * @return A new instance of fragment ForecastFragment.
 	 */
-	public static CurrentWeatherFragment newInstance(String status, int temp, int high, int low) {
-		CurrentWeatherFragment fragment = new CurrentWeatherFragment();
+	public static ForecastFragment newInstance(String[] days, String[] statuses, int[] temps) {
+		ForecastFragment fragment = new ForecastFragment();
 		Bundle args = new Bundle();
-		args.putString(ARG_PARAM_STATUS, status);
-		args.putInt(ARG_PARAM_TEMP, temp);
-		args.putInt(ARG_PARAM_HIGH, high);
-		args.putInt(ARG_PARAM_LOW, low);
+		args.putStringArray(ARG_PARAM_DAYS, days);
+		args.putStringArray(ARG_PARAM_STATUSES, statuses);
+		args.putIntArray(ARG_PARAM_TEMPS, temps);
 		fragment.setArguments(args);
 		return fragment;
 	}
@@ -60,10 +56,9 @@ public class CurrentWeatherFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (getArguments() != null) {
-			paramStatus = getArguments().getString(ARG_PARAM_STATUS);
-			paramTemp = getArguments().getInt(ARG_PARAM_TEMP);
-			paramHigh = getArguments().getInt(ARG_PARAM_HIGH);
-			paramLow = getArguments().getInt(ARG_PARAM_LOW);
+			paramDays = getArguments().getStringArray(ARG_PARAM_DAYS);
+			paramStatuses = getArguments().getStringArray(ARG_PARAM_STATUSES);
+			paramTemps = getArguments().getIntArray(ARG_PARAM_TEMPS);
 		}
 	}
 
@@ -71,7 +66,7 @@ public class CurrentWeatherFragment extends Fragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 	                         Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		return inflater.inflate(R.layout.fragment_current_weather, container, false);
+		return inflater.inflate(R.layout.fragment_forecast, container, false);
 	}
 
 	@Override
