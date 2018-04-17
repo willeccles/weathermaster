@@ -31,14 +31,15 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.action_settings:
-				// show the settings (if needed, if not we can remove this option)
-				return true;
-
 			case R.id.action_map:
 				// show the map view
 				Intent intent = new Intent(this, MapActivity.class);
 				startActivity(intent);
+				return true;
+
+			case R.id.action_favorites:
+				Intent i = new Intent(this, FavoritesActivity.class);
+				startActivity(i);
 				return true;
 
 			default:

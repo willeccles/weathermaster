@@ -21,8 +21,11 @@ public class DetailActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_detail);
 		isFavorite = getIntent().getBooleanExtra("isFav", false);
+		int type = getIntent().getIntExtra(TYPE, CURRENT);
 		Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+		myToolbar.setTitle(type==1?"Forecast":"Current Weather");
 		setSupportActionBar(myToolbar);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 
 	@Override
@@ -33,10 +36,24 @@ public class DetailActivity extends AppCompatActivity {
 		return true;
 	}
 
+	// used to toggle whether or not the current location is a favorite
+	private void toggleFavorite() {
+		if (isFavorite) {
+			// TODO set to not be a favorite in SQL here
+
+			((MenuView.ItemView)findViewById(R.id.action_favorite)).setIcon(getDrawable(R.drawable.ic_favorite_border_black_24dp));
+		} else {
+			// TODO set it to be a favorite in SQL
+
+			((MenuView.ItemView)findViewById(R.id.action_favorite)).setIcon(getDrawable(R.drawable.ic_favorite_black_24dp));
+		}
+	}
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 			case R.id.action_favorite:
+				toggleFavorite();
 				return true;
 
 			default:
