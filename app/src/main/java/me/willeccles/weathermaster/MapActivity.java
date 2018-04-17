@@ -33,6 +33,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
 		Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+		myToolbar.setTitle("Choose Location");
 		setSupportActionBar(myToolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		mapView = (MapView) findViewById(R.id.mapView);
