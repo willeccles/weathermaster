@@ -18,15 +18,6 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class ForecastFragment extends Fragment {
-	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-	private static final String ARG_PARAM_DAYS = "param1";
-	private static final String ARG_PARAM_STATUSES = "param2";
-	private static final String ARG_PARAM_TEMPS = "param3";
-
-	private String[] paramDays;
-	private String[] paramStatuses;
-	private int[] paramTemps;
-
 	private OnFragmentInteractionListener mListener;
 
 	public ForecastFragment() {
@@ -37,18 +28,12 @@ public class ForecastFragment extends Fragment {
 	 * Use this factory method to create a new instance of
 	 * this fragment using the provided parameters.
 	 *
-	 * @param days The list of day names.
-	 * @param statuses The list of statuses (for each day).
-	 * @param temps The list of temps, formatted as: {temp, high, low, temp2, high2, low2, etc.}
+	 * @param forecast The bundle of stuff from the forecast.
 	 * @return A new instance of fragment ForecastFragment.
 	 */
-	public static ForecastFragment newInstance(String[] days, String[] statuses, int[] temps) {
+	public static ForecastFragment newInstance(Bundle forecast) {
 		ForecastFragment fragment = new ForecastFragment();
-		Bundle args = new Bundle();
-		args.putStringArray(ARG_PARAM_DAYS, days);
-		args.putStringArray(ARG_PARAM_STATUSES, statuses);
-		args.putIntArray(ARG_PARAM_TEMPS, temps);
-		fragment.setArguments(args);
+		fragment.setArguments(forecast);
 		return fragment;
 	}
 
@@ -56,9 +41,7 @@ public class ForecastFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (getArguments() != null) {
-			paramDays = getArguments().getStringArray(ARG_PARAM_DAYS);
-			paramStatuses = getArguments().getStringArray(ARG_PARAM_STATUSES);
-			paramTemps = getArguments().getIntArray(ARG_PARAM_TEMPS);
+			// see weatherworker for formatting of this bundle
 		}
 	}
 

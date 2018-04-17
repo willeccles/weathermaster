@@ -18,17 +18,6 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class CurrentWeatherFragment extends Fragment {
-	// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-	public static final String ARG_PARAM_STATUS = "param1";
-	public static final String ARG_PARAM_TEMP = "param2";
-	public static final String ARG_PARAM_HIGH = "param3";
-	public static final String ARG_PARAM_LOW = "param4";
-
-	private String paramStatus;
-	private int paramTemp;
-	private int paramHigh;
-	private int paramLow;
-
 	private OnFragmentInteractionListener mListener;
 
 	public CurrentWeatherFragment() {
@@ -39,20 +28,12 @@ public class CurrentWeatherFragment extends Fragment {
 	 * Use this factory method to create a new instance of
 	 * this fragment using the provided parameters.
 	 *
-	 * @param status The status of the weather (raining, snowing, etc)
-	 * @param temp The current temperature.
-	 * @param high The high temperature of the day.
-	 * @param low The low temperature for the day.
+	 * @param weather The weather bundle straight from the WeatherWorker that should be used for this fragment.
 	 * @return A new instance of fragment CurrentWeatherFragment.
 	 */
-	public static CurrentWeatherFragment newInstance(String status, int temp, int high, int low) {
+	public static CurrentWeatherFragment newInstance(Bundle weather) {
 		CurrentWeatherFragment fragment = new CurrentWeatherFragment();
-		Bundle args = new Bundle();
-		args.putString(ARG_PARAM_STATUS, status);
-		args.putInt(ARG_PARAM_TEMP, temp);
-		args.putInt(ARG_PARAM_HIGH, high);
-		args.putInt(ARG_PARAM_LOW, low);
-		fragment.setArguments(args);
+		fragment.setArguments(weather);
 		return fragment;
 	}
 
@@ -60,10 +41,7 @@ public class CurrentWeatherFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (getArguments() != null) {
-			paramStatus = getArguments().getString(ARG_PARAM_STATUS);
-			paramTemp = getArguments().getInt(ARG_PARAM_TEMP);
-			paramHigh = getArguments().getInt(ARG_PARAM_HIGH);
-			paramLow = getArguments().getInt(ARG_PARAM_LOW);
+			// see the WeatherWorker for the format of this bundle
 		}
 	}
 
