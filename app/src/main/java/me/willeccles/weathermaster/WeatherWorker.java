@@ -25,38 +25,23 @@ import java.util.TimeZone;
 
 public class WeatherWorker extends AsyncTask<String, String, Bundle> {
 	static String FORECAST_URL = "https://api.openweathermap.org/data/2.5/forecast/daily?%s&APPID=%s&cnt=5";
-	static String CURRENT_URL = "https://api.openweathermap.org/data/2.5?weather?%s&APPID=%s";
+	static String CURRENT_URL = "https://api.openweathermap.org/data/2.5/weather?%s&APPID=%s";
 	static String KEY = "0f0d5c7b1e715210f113b114b66acfb3";
-	private MainActivity main;
 
-	public WeatherWorker(MainActivity m) {
-		main = m;
+	public WeatherWorker() {
 	}
 
 	/**
-	 * Get the 5-day forecast. Parameters will be used in the order of precedence they are written in. If the location is "" and zip code is 0, the latitude and longitude will be used.
-	 * If location is supplied and everything else is 0 or 0.0, the location will be used.
+	 * A helper method to get the params to give to doInBackground(). If location is "", it will use zip; if that's "" it will use lat/long.
+	 * @param forecast If true, gets the 5-day forecast. Otherwise, gets current weather.
 	 * @param location The location name.
 	 * @param zip The zip code.
-	 * @param lat The latitude.
-	 * @param lon The longitude.
-	 * @return The bundle of returned values.
+	 * @param lat Latitude.
+	 * @param lon Longitude.
+	 * @return
 	 */
-	public Bundle getForecast(String location, int zip, double lat, double lon) {
-		return doInBackground("forecast", location, String.valueOf(zip), String.valueOf(lat), String.valueOf(lon));
-	}
-
-	/**
-	 * Get the current weather. Parameters will be used in the order of precedence they are written in. If the location is "" and zip code is 0, the latitude and longitude will be used.
-	 * If location is supplied and everything else is 0 or 0.0, the location will be used.
-	 * @param location The location name.
-	 * @param zip The zip code.
-	 * @param lat The latitude.
-	 * @param lon The longitude.
-	 * @return The bundle of returned values.
-	 */
-	public Bundle getCurrent(String location, int zip, double lat, double lon) {
-		return doInBackground("current", location, String.valueOf(zip), String.valueOf(lat), String.valueOf(lon));
+	public static String[] getParams(boolean forecast, String location, String zip, double lat, double lon) {
+		return new String[]{forecast?"forecast":"current", location, zip, String.valueOf(lat), String.valueOf(lon)};
 	}
 
 	@Override
@@ -78,7 +63,7 @@ public class WeatherWorker extends AsyncTask<String, String, Bundle> {
 
 		String queryParams = "";
 
-		if (!strings[1].matches("^\\s+$")) {
+		if (!strings[1].trim().isEmpty()) {
 			queryParams = "q=" + strings[1].trim();
 		} else if (strings[2].trim().matches("\\d{5}")) {
 			queryParams = "zip=" + strings[2].trim() + ",us";
@@ -87,7 +72,7 @@ public class WeatherWorker extends AsyncTask<String, String, Bundle> {
 		}
 
 		try {
-			URL url = new URL(String.format(queryUrl, queryParams, KEY));
+			URL url = new URL(String.format(queryUrl, URLEncoder.encode(queryParams, "UTF-8"), KEY));
 			urlConnection = (HttpURLConnection) url.openConnection();
 			urlConnection.setRequestMethod("GET");
 			urlConnection.connect();
@@ -111,17 +96,18 @@ public class WeatherWorker extends AsyncTask<String, String, Bundle> {
 				JSONObject weatherObj = jobject.getJSONArray("weather").getJSONObject(0);
 				JSONObject mainObj = jobject.getJSONObject("main");
 				// fill stuff from the current weather
-				resultBundle.putString("location", jobject.getString("name") + ", " + jobject.getJSONObject("sys").getString("country"));
+				resultBundle.putString("location", jobject.getString("name"));
 				resultBundle.putString("status", weatherObj.getString("main"));
 				resultBundle.putDouble("temp", mainObj.getDouble("temp"));
 				resultBundle.putDouble("temp_min", mainObj.getDouble("temp_min"));
 				resultBundle.putDouble("temp_max", mainObj.getDouble("temp_max"));
+				Log.i("current weather", "weather: " + resultBundle.getString("location") + " " + resultBundle.getString("status") + " " + resultBundle.getDouble("temp") + " " + resultBundle.getDouble("temp_min") + " " + resultBundle.getDouble("temp_max"));
 			} else {
 				JSONArray daysList = jobject.getJSONArray("list");
 				SimpleDateFormat sdf = new SimpleDateFormat("E");
 				sdf.setTimeZone(TimeZone.getDefault());
 				String day;
-				resultBundle.putString("location", jobject.getJSONObject("city").getString("name") + ", " + jobject.getJSONObject("city").getString("country"));
+				resultBundle.putString("location", jobject.getJSONObject("city").getString("name"));
 				// fill stuff from the 5-day forecast
 				for (int i = 0; i < 5; i++) {
 					Bundle dayBundle = new Bundle();
@@ -138,7 +124,7 @@ public class WeatherWorker extends AsyncTask<String, String, Bundle> {
 
 			return resultBundle;
 		} catch (Exception e) {
-			Log.e("Exception e: ", e.getMessage());
+			Log.e("Exception e: ", Log.getStackTraceString(e));
 		} finally {
 			try {
 				if (reader != null)
@@ -146,7 +132,7 @@ public class WeatherWorker extends AsyncTask<String, String, Bundle> {
 				if (urlConnection != null)
 					urlConnection.disconnect();
 			} catch (Exception e2) {
-				Log.e("Exception e2: ", e2.getMessage());
+				Log.e("Exception e2: ", Log.getStackTraceString(e2));
 			}
 		}
 
