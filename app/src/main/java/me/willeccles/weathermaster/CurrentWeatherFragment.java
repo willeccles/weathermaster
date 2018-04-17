@@ -3,10 +3,14 @@ package me.willeccles.weathermaster;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 
 /**
@@ -19,6 +23,10 @@ import android.view.ViewGroup;
  */
 public class CurrentWeatherFragment extends Fragment {
 	private OnFragmentInteractionListener mListener;
+
+	private String w_status = "";
+	private String w_temp = "";
+	private String w_hi_lo_temp = "";
 
 	public CurrentWeatherFragment() {
 		// Required empty public constructor
@@ -41,15 +49,31 @@ public class CurrentWeatherFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		if (getArguments() != null) {
-			// see the WeatherWorker for the format of this bundle
+			Bundle w = getArguments();
+			w_status = w.getString("status");
+			w_temp = String.format("Temperature: %.1fº", WeatherWorker.convertTemp(getContext(), w.getDouble("temp")));
+			w_hi_lo_temp = String.format("Low: %.1fº, High: %.1fº",
+					WeatherWorker.convertTemp(getContext(), w.getDouble("temp_min")),
+					WeatherWorker.convertTemp(getContext(), w.getDouble("temp_max"))
+			);
 		}
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-	                         Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		return inflater.inflate(R.layout.fragment_current_weather, container, false);
+	}
+
+	@Override
+	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+		TextView wstatus = (TextView) getView().findViewById(R.id.weatherStatus);
+		wstatus.setText(w_status);
+		TextView wtemp = (TextView) getView().findViewById(R.id.temperature);
+		wtemp.setText(w_temp);
+		TextView wtemps = (TextView) getView().findViewById(R.id.highLowTemperature);
+		wtemps.setText(w_hi_lo_temp);
+
 	}
 
 	@Override

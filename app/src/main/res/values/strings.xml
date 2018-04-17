@@ -6,4 +6,6 @@
     <string name="no_permission_dialog_message">You\'ll need to allow us access to your location in order to use the map.</string>
     <string name="no_permission_dialog_title">Permission Required</string>
     <string name="ok">OK</string>
+    <string name="prefFileKey">me.willeccles.weathermaster.prefs</string>
+    <string name="unitPrefKey">UNIT_PREF</string>
 </resources>

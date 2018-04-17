@@ -6,6 +6,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,6 +31,30 @@ public class MainActivity extends AppCompatActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main_toolbar, menu);
 		return true;
+	}
+
+	// when either of the weather buttons is pressed (since they are similar enough to warrant having the same callback)
+	protected void weatherButtonPressed(View v) {
+		switch (v.getId()) {
+			case R.id.buttonCurrent:
+				// go to the details after getting the weather
+				String city = ((TextView)findViewById(R.id.cityName)).getText().toString().trim();
+				String zip = ((TextView)findViewById(R.id.zipCode)).getText().toString().trim();
+				if (city.isEmpty() && zip.isEmpty()) {
+					Toast.makeText(this, "Please enter either a city name or a zip code.", Toast.LENGTH_SHORT).show();
+					break;
+				}
+
+				if (!city.isEmpty()) {
+					new WeatherWorker(this).execute(WeatherWorker.getParams(false, city, "", 0.0, 0.0));
+				} else {
+					new WeatherWorker(this).execute(WeatherWorker.getParams(false, "", zip, 0.0, 0.0));
+				}
+				break;
+
+			case R.id.buttonForecast:
+				break;
+		}
 	}
 
 	@Override

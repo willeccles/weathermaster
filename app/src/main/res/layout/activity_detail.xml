@@ -16,15 +16,23 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
     <fragment
-        android:id="@+id/fragment"
+        android:id="@+id/currentfragment"
         android:name="me.willeccles.weathermaster.CurrentWeatherFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/my_toolbar" />
 
+    <fragment
+        android:id="@+id/forecastfragment"
+        android:name="me.willeccles.weathermaster.ForecastFragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/my_toolbar" />
+
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/backgroundImage"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/my_toolbar" />

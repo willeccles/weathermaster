@@ -1,6 +1,8 @@
 package me.willeccles.weathermaster;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -27,8 +29,12 @@ public class WeatherWorker extends AsyncTask<String, String, Bundle> {
 	static String FORECAST_URL = "https://api.openweathermap.org/data/2.5/forecast/daily?%s&APPID=%s&cnt=5";
 	static String CURRENT_URL = "https://api.openweathermap.org/data/2.5/weather?%s&APPID=%s";
 	static String KEY = "0f0d5c7b1e715210f113b114b66acfb3";
+	static int C = 0;
+	static int F = 1;
+	private MainActivity main;
 
-	public WeatherWorker() {
+	public WeatherWorker(MainActivity m) {
+		main = m;
 	}
 
 	/**
@@ -42,6 +48,36 @@ public class WeatherWorker extends AsyncTask<String, String, Bundle> {
 	 */
 	public static String[] getParams(boolean forecast, String location, String zip, double lat, double lon) {
 		return new String[]{forecast?"forecast":"current", location, zip, String.valueOf(lat), String.valueOf(lon)};
+	}
+
+	/**
+	 * Convert a Kelvin value to Celsius.
+	 * @param k The value in Kelvin.
+	 * @return The value in Celsius.
+	 */
+	public static native double kelvinToC(double k);
+
+	/**
+	 * Convert a Kelvin value to Fahrenheit.
+	 * @param k The value in Kelvin.
+	 * @return The value in Fahrenheit.
+	 */
+	public static native double kelvinToF(double k);
+
+	/**
+	 * Convert a temperature from Kelvin to the unit the user has selected.
+	 * @param c The context to use.
+	 * @param K The temperature in Kelvin.
+	 * @return The temperature in either Celsius or Fahrenheit.
+	 */
+	public static double convertTemp(Context c, double K) {
+		SharedPreferences sharedpref = c.getSharedPreferences(c.getString(R.string.prefFileKey), Context.MODE_PRIVATE);
+		// default to C if none is found
+		if (sharedpref.getInt(c.getString(R.string.unitPrefKey), C) == C) {
+			return kelvinToC(K);
+		} else {
+			return kelvinToF(K);
+		}
 	}
 
 	@Override
@@ -61,18 +97,26 @@ public class WeatherWorker extends AsyncTask<String, String, Bundle> {
 			queryUrl = CURRENT_URL;
 		}
 
+		String queryFlag = "";
 		String queryParams = "";
 
 		if (!strings[1].trim().isEmpty()) {
-			queryParams = "q=" + strings[1].trim();
+			queryFlag = "q=%s";
+			queryParams = strings[1].trim();
 		} else if (strings[2].trim().matches("\\d{5}")) {
-			queryParams = "zip=" + strings[2].trim() + ",us";
+			queryFlag = "zip=%s,us";
+			queryParams = strings[2].trim();
 		} else {
-			queryParams = "lat=" + strings[3] + "&lon=" + strings[4];
+			queryFlag = "lat=%s&lon=%s";
 		}
 
 		try {
-			URL url = new URL(String.format(queryUrl, URLEncoder.encode(queryParams, "UTF-8"), KEY));
+			URL url;
+			if (queryParams.isEmpty()) {
+				url = new URL(String.format(queryUrl, String.format(queryFlag, strings[3], strings[4]), KEY));
+			} else {
+				url = new URL(String.format(queryUrl, String.format(queryFlag, URLEncoder.encode(queryParams, "UTF-8")), KEY));
+			}
 			urlConnection = (HttpURLConnection) url.openConnection();
 			urlConnection.setRequestMethod("GET");
 			urlConnection.connect();
@@ -101,7 +145,6 @@ public class WeatherWorker extends AsyncTask<String, String, Bundle> {
 				resultBundle.putDouble("temp", mainObj.getDouble("temp"));
 				resultBundle.putDouble("temp_min", mainObj.getDouble("temp_min"));
 				resultBundle.putDouble("temp_max", mainObj.getDouble("temp_max"));
-				Log.i("current weather", "weather: " + resultBundle.getString("location") + " " + resultBundle.getString("status") + " " + resultBundle.getDouble("temp") + " " + resultBundle.getDouble("temp_min") + " " + resultBundle.getDouble("temp_max"));
 			} else {
 				JSONArray daysList = jobject.getJSONArray("list");
 				SimpleDateFormat sdf = new SimpleDateFormat("E");
@@ -142,5 +185,10 @@ public class WeatherWorker extends AsyncTask<String, String, Bundle> {
 	@Override
 	protected void onPostExecute(Bundle b) {
 		super.onPostExecute(b);
+		Intent i = new Intent(main, DetailActivity.class);
+		i.putExtra("isFav", false);
+		i.putExtra(DetailActivity.TYPE, DetailActivity.CURRENT);
+		i.putExtra("weatherBundle", b);
+		main.startActivity(i);
 	}
 }

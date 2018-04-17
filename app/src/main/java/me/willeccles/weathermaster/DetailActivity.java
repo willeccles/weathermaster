@@ -1,30 +1,25 @@
 package me.willeccles.weathermaster;
 
-import android.content.Intent;
+import android.net.Uri;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-public class DetailActivity extends AppCompatActivity {
+public class DetailActivity extends AppCompatActivity implements CurrentWeatherFragment.OnFragmentInteractionListener, ForecastFragment.OnFragmentInteractionListener {
 
 	// used to determine which type of details to show
 	public static final String TYPE = "type";
 	public static final int CURRENT = 0;
 	public static final int FORECAST = 1;
-	public static String LOCATION = "loc";
-	public static String STATUS = "status";
-	public static String TEMP = "temp";
-	public static String HIGH = "high_temp";
-	public static String LOW = "low_temp";
 	private boolean isFavorite = false;
-	private String locationName = "Details";
-	private String weatherStatus = "STATUS";
-	private int weatherTemp = 0;
-	private int weatherHigh = 0;
-	private int weatherLow = 0;
+	private Bundle weatherBundle;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -35,19 +30,28 @@ public class DetailActivity extends AppCompatActivity {
 		isFavorite = getIntent().getBooleanExtra("isFav", false);
 
 		// get the weather stuff ready
-		locationName = getIntent().getStringExtra(LOCATION);
-		weatherStatus = getIntent().getStringExtra(STATUS);
-		weatherTemp = getIntent().getIntExtra(TEMP, -2147483648);
-		weatherHigh = getIntent().getIntExtra(HIGH, -2147483648);
-		weatherLow = getIntent().getIntExtra(LOW, -2147483648);
+		weatherBundle = getIntent().getBundleExtra("weatherBundle");
 
 		// get what kind of thing it is (forecast or current)
 		int type = getIntent().getIntExtra(TYPE, CURRENT);
 
 		Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
-		myToolbar.setTitle(locationName);
+		myToolbar.setTitle(weatherBundle.getString("location"));
 		setSupportActionBar(myToolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+		FragmentManager manager = getSupportFragmentManager();
+		FragmentTransaction transaction = manager.beginTransaction();
+		if (type == CURRENT) {
+			CurrentWeatherFragment cwf = CurrentWeatherFragment.newInstance(weatherBundle);
+			transaction.add(R.id.currentfragment, cwf);
+			transaction.commit();
+			View forecast = (View) findViewById(R.id.forecastfragment);
+			forecast.setEnabled(false);
+			forecast.setVisibility(View.INVISIBLE);
+		} else {
+
+		}
 	}
 
 	@Override
@@ -84,5 +88,10 @@ public class DetailActivity extends AppCompatActivity {
 				return super.onOptionsItemSelected(item);
 
 		}
+	}
+
+	@Override
+	public void onFragmentInteraction(Uri uri) {
+
 	}
 }
