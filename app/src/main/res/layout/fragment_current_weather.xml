@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:background="#7F000000"
     android:padding="16dp"
-    tools:context="me.willeccles.weathermaster.DetailFragment">
+    tools:context="me.willeccles.weathermaster.CurrentWeatherFragment">
 
     <TextView
         android:id="@+id/locationTitle"
