@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="me.willeccles.weathermaster.MainActivity">
@@ -13,7 +14,7 @@
         android:background="?attr/colorPrimary"
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
     <EditText
         android:id="@+id/cityName"
@@ -45,22 +46,22 @@
 
     <Button
         android:id="@+id/buttonCurrent"
-        android:onClick="weatherButtonPressed"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="58dp"
         android:layout_marginTop="20dp"
+        android:onClick="weatherButtonPressed"
         android:text="Current"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/zipCode" />
 
     <Button
         android:id="@+id/buttonForecast"
-        android:onClick="weatherButtonPressed"
         android:layout_width="110dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="58dp"
         android:layout_marginTop="20dp"
+        android:onClick="weatherButtonPressed"
         android:text="Forecast"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/zipCode" />
