@@ -44,8 +44,11 @@
         <activity
             android:name=".FavoritesActivity"
             android:parentActivityName=".MainActivity" />
-        <activity android:name=".SettingsActivity"
-            android:parentActivityName=".MainActivity" ></activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity android:name=".AboutActivity"
+            android:parentActivityName=".SettingsActivity" />
     </application>
 
 </manifest>
