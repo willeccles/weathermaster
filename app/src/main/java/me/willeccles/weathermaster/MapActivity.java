@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.AlertDialog;
@@ -15,6 +16,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -24,8 +27,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
-	MapView mapView;
+	MapFragment mapFrag;
 	GoogleMap map;
+	FusedLocationProviderClient mFusedLocationProviderClient;
 	public static final int PERMISSION_REQUEST_CODE = 24;
 
 	@Override
@@ -36,9 +40,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		myToolbar.setTitle("Choose Location");
 		setSupportActionBar(myToolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		mapView = findViewById(R.id.mapView);
-		mapView.onCreate(savedInstanceState);
-		mapView.getMapAsync(this);
+		mapFrag = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
+		mapFrag.getMapAsync(this);
+		mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 	}
 
 	@Override
@@ -64,6 +68,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		}
 
 		map.setMyLocationEnabled(true);
+		map.getUiSettings().setAllGesturesEnabled(true);
+		map.getUiSettings().setCompassEnabled(true);
+		map.getUiSettings().setIndoorLevelPickerEnabled(false);
+		map.getUiSettings().setMapToolbarEnabled(true);
+
 		map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 	}
 
@@ -94,6 +103,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 			}
 		}
 
-		mapView.getMapAsync(this);
+		mapFrag.getMapAsync(this);
 	}
 }
