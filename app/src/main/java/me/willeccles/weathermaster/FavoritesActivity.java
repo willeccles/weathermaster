@@ -13,7 +13,7 @@ public class FavoritesActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_favorites);
-		Toolbar myToolbar = (Toolbar) findViewById(R.id.fav_toolbar);
+		Toolbar myToolbar = findViewById(R.id.fav_toolbar);
 		myToolbar.setTitle("Favorite Locations");
 		setSupportActionBar(myToolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);

@@ -67,11 +67,11 @@ public class CurrentWeatherFragment extends Fragment {
 
 	@Override
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-		TextView wstatus = (TextView) getView().findViewById(R.id.weatherStatus);
+		TextView wstatus = getView().findViewById(R.id.weatherStatus);
 		wstatus.setText(w_status);
-		TextView wtemp = (TextView) getView().findViewById(R.id.temperature);
+		TextView wtemp = getView().findViewById(R.id.temperature);
 		wtemp.setText(w_temp);
-		TextView wtemps = (TextView) getView().findViewById(R.id.highLowTemperature);
+		TextView wtemps = getView().findViewById(R.id.highLowTemperature);
 		wtemps.setText(w_hi_lo_temp);
 
 	}

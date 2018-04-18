@@ -39,7 +39,7 @@ public class DetailActivity extends AppCompatActivity implements CurrentWeatherF
 		// get what kind of thing it is (forecast or current)
 		int type = weatherBundle.getInt(TYPE);
 
-		Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+		Toolbar myToolbar = findViewById(R.id.my_toolbar);
 		myToolbar.setTitle(weatherBundle.getString("location"));
 		setSupportActionBar(myToolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -61,7 +61,7 @@ public class DetailActivity extends AppCompatActivity implements CurrentWeatherF
 		}
 
 		// set the background image based on the weather
-		ImageView iv = (ImageView) findViewById(R.id.backgroundImage);
+		ImageView iv = findViewById(R.id.backgroundImage);
 		if (status.equals("Clouds")) {
 			iv.setImageResource(R.drawable.clouds);
 		} else if (status.equals("Rain")) {

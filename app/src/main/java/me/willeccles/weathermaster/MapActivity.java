@@ -32,11 +32,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
-		Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
+		Toolbar myToolbar = findViewById(R.id.my_toolbar);
 		myToolbar.setTitle("Choose Location");
 		setSupportActionBar(myToolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		mapView = (MapView) findViewById(R.id.mapView);
+		mapView = findViewById(R.id.mapView);
 		mapView.onCreate(savedInstanceState);
 		mapView.getMapAsync(this);
 	}

@@ -73,11 +73,11 @@ public class ForecastFragment extends Fragment {
 	@Override
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 		for (int i = 0; i < 5; i++) {
-			TextView dayTitle = (TextView) view.findViewById(R.id.dayTitle + i);
+			TextView dayTitle = view.findViewById(R.id.dayTitle + i);
 			dayTitle.setText(w_daynames[i]);
-			TextView dayStat = (TextView) view.findViewById(R.id.status + i);
+			TextView dayStat = view.findViewById(R.id.status + i);
 			dayStat.setText(w_statuses[i]);
-			TextView dayTemp = (TextView) view.findViewById(R.id.temps + i);
+			TextView dayTemp = view.findViewById(R.id.temps + i);
 			dayTemp.setText(w_hi_lows[i]);
 		}
 	}
