@@ -63,7 +63,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 			return;
 		}
 
-		map.setMyLocationEnabled(false);
+		map.setMyLocationEnabled(true);
 		map.getUiSettings().setAllGesturesEnabled(false);
 		map.getUiSettings().setCompassEnabled(false);
 		map.getUiSettings().setIndoorLevelPickerEnabled(false);
