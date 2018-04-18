@@ -1,5 +1,7 @@
 package me.willeccles.weathermaster;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +13,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 
 public class DetailActivity extends AppCompatActivity implements CurrentWeatherFragment.OnFragmentInteractionListener, ForecastFragment.OnFragmentInteractionListener {
 
@@ -33,7 +37,7 @@ public class DetailActivity extends AppCompatActivity implements CurrentWeatherF
 		weatherBundle = getIntent().getBundleExtra("weatherBundle");
 
 		// get what kind of thing it is (forecast or current)
-		int type = getIntent().getIntExtra(TYPE, CURRENT);
+		int type = weatherBundle.getInt(TYPE);
 
 		Toolbar myToolbar = (Toolbar) findViewById(R.id.my_toolbar);
 		myToolbar.setTitle(weatherBundle.getString("location"));
@@ -42,15 +46,30 @@ public class DetailActivity extends AppCompatActivity implements CurrentWeatherF
 
 		FragmentManager manager = getSupportFragmentManager();
 		FragmentTransaction transaction = manager.beginTransaction();
+
+		String status; // used to set the background image
 		if (type == CURRENT) {
 			CurrentWeatherFragment cwf = CurrentWeatherFragment.newInstance(weatherBundle);
-			transaction.add(R.id.currentfragment, cwf);
+			transaction.add(R.id.fragmentFrame, cwf);
 			transaction.commit();
-			View forecast = (View) findViewById(R.id.forecastfragment);
-			forecast.setEnabled(false);
-			forecast.setVisibility(View.INVISIBLE);
+			status = weatherBundle.getString("status");
 		} else {
+			ForecastFragment ff = ForecastFragment.newInstance(weatherBundle);
+			transaction.add(R.id.fragmentFrame, ff);
+			transaction.commit();
+			status = weatherBundle.getBundle("day0").getString("status");
+		}
 
+		// set the background image based on the weather
+		ImageView iv = (ImageView) findViewById(R.id.backgroundImage);
+		if (status.equals("Clouds")) {
+			iv.setImageResource(R.drawable.clouds);
+		} else if (status.equals("Rain")) {
+			iv.setImageResource(R.drawable.rain);
+		} else if (status.equals("Clear")) {
+			iv.setImageResource(R.drawable.clear);
+		} else if (status.equals("Snow")) {
+			iv.setImageResource(R.drawable.snow);
 		}
 	}
 

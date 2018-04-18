@@ -3,10 +3,13 @@ package me.willeccles.weathermaster;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 /**
@@ -19,6 +22,11 @@ import android.view.ViewGroup;
  */
 public class ForecastFragment extends Fragment {
 	private OnFragmentInteractionListener mListener;
+
+	// parameters
+	private String w_daynames[] = new String[5];
+	private String w_statuses[] = new String[5];
+	private String w_hi_lows[] = new String[5];
 
 	public ForecastFragment() {
 		// Required empty public constructor
@@ -42,6 +50,16 @@ public class ForecastFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		if (getArguments() != null) {
 			// see weatherworker for formatting of this bundle
+			Bundle w = getArguments();
+			for (int i = 0; i < 5; i++) {
+				Bundle day = w.getBundle("day" + String.valueOf(i));
+				w_daynames[i] = day.getString("day");
+				double temps[] = day.getDoubleArray("temps");
+				w_statuses[i] = String.format("%.1fº, %s", WeatherWorker.convertTemp(getContext(), temps[1]), day.getString("status"));
+				w_hi_lows[i] = String.format("Low: %.1fº High: %.1fº",
+						WeatherWorker.convertTemp(getContext(), temps[0]),
+						WeatherWorker.convertTemp(getContext(), temps[2]));
+			}
 		}
 	}
 
@@ -50,6 +68,18 @@ public class ForecastFragment extends Fragment {
 	                         Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
 		return inflater.inflate(R.layout.fragment_forecast, container, false);
+	}
+
+	@Override
+	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+		for (int i = 0; i < 5; i++) {
+			TextView dayTitle = (TextView) view.findViewById(R.id.dayTitle + i);
+			dayTitle.setText(w_daynames[i]);
+			TextView dayStat = (TextView) view.findViewById(R.id.status + i);
+			dayStat.setText(w_statuses[i]);
+			TextView dayTemp = (TextView) view.findViewById(R.id.temps + i);
+			dayTemp.setText(w_hi_lows[i]);
+		}
 	}
 
 	@Override

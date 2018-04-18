@@ -26,7 +26,7 @@ import java.util.TimeZone;
  */
 
 public class WeatherWorker extends AsyncTask<String, String, Bundle> {
-	static String FORECAST_URL = "https://api.openweathermap.org/data/2.5/forecast/daily?%s&APPID=%s&cnt=5";
+	static String FORECAST_URL = "https://api.openweathermap.org/data/2.5/forecast?%s&APPID=%s";
 	static String CURRENT_URL = "https://api.openweathermap.org/data/2.5/weather?%s&APPID=%s";
 	static String KEY = "0f0d5c7b1e715210f113b114b66acfb3";
 	static int C = 0;
@@ -145,24 +145,9 @@ public class WeatherWorker extends AsyncTask<String, String, Bundle> {
 				resultBundle.putDouble("temp", mainObj.getDouble("temp"));
 				resultBundle.putDouble("temp_min", mainObj.getDouble("temp_min"));
 				resultBundle.putDouble("temp_max", mainObj.getDouble("temp_max"));
+				resultBundle.putInt(DetailActivity.TYPE, DetailActivity.CURRENT);
 			} else {
-				JSONArray daysList = jobject.getJSONArray("list");
-				SimpleDateFormat sdf = new SimpleDateFormat("E");
-				sdf.setTimeZone(TimeZone.getDefault());
-				String day;
-				resultBundle.putString("location", jobject.getJSONObject("city").getString("name"));
-				// fill stuff from the 5-day forecast
-				for (int i = 0; i < 5; i++) {
-					Bundle dayBundle = new Bundle();
-					JSONObject dayObj = daysList.getJSONObject(i);
-					Date date = new Date(dayObj.getLong("dt")*1000L);
-					day = sdf.format(date);
-					dayBundle.putString("day", day);
-					dayBundle.putString("status", dayObj.getJSONArray("weather").getJSONObject(0).getString("main"));
-					double temps[] = {dayObj.getJSONObject("temp").getDouble("min"), dayObj.getJSONObject("temp").getDouble("day"), dayObj.getJSONObject("temp").getDouble("max")};
-					dayBundle.putDoubleArray("temps", temps);
-					resultBundle.putBundle("day" + String.valueOf(i), dayBundle);
-				}
+				resultBundle = getForecastData(jobject);
 			}
 
 			return resultBundle;
@@ -182,12 +167,62 @@ public class WeatherWorker extends AsyncTask<String, String, Bundle> {
 		return null; // error
 	}
 
+	// used to get the data for the 5-day forecast, since parsing this is quite long and
+	// it made more sense to put it in its own method rather than above.
+	private static Bundle getForecastData(JSONObject jobject) {
+		Bundle forecastBundle = new Bundle();
+		forecastBundle.putInt(DetailActivity.TYPE, DetailActivity.FORECAST);
+		try {
+			JSONArray sampleList = jobject.getJSONArray("list");
+			SimpleDateFormat sdf = new SimpleDateFormat("EEEE");
+			sdf.setTimeZone(TimeZone.getDefault());
+			String dayString;
+			forecastBundle.putString("location", jobject.getJSONObject("city").getString("name"));
+
+			// iterate through all 8 samples for all 5 days
+			for (int day = 0; day < 5; day++) {
+				double temp_total = 0.0;
+				double temp_min = 4000000.0;
+				double temp_max = -4000000.0;
+				Bundle dayBundle = new Bundle();
+
+				for (int sample = 0; sample < 8; sample++) {
+					JSONObject w_sample = sampleList.getJSONObject(day*8+sample);
+					if (sample == 0) {
+						Date date = new Date(w_sample.getLong("dt")*1000L);
+						dayString = sdf.format(date);
+						dayBundle.putString("day", dayString);
+						Log.d("Day String:", dayString);
+					}
+					if (sample == 4) {
+						dayBundle.putString("status", w_sample.getJSONArray("weather").getJSONObject(0).getString("main"));
+					}
+					double low = w_sample.getJSONObject("main").getDouble("temp_min");
+					double high = w_sample.getJSONObject("main").getDouble("temp_max");
+					double temp = w_sample.getJSONObject("main").getDouble("temp");
+					temp_min = low<temp_min? low : temp_min;
+					temp_max = high>temp_max? high : temp_max;
+					temp_total += temp;
+				}
+
+				temp_total /= 8.0; // get the average temperature for the day
+				dayBundle.putDoubleArray("temps", new double[]{temp_min, temp_total, temp_max});
+				forecastBundle.putBundle("day" + String.valueOf(day), dayBundle);
+			}
+		} catch (Exception e) {
+			Log.e("JSON error:", Log.getStackTraceString(e));
+			return null;
+		}
+
+		return forecastBundle;
+	}
+
 	@Override
 	protected void onPostExecute(Bundle b) {
 		super.onPostExecute(b);
 		Intent i = new Intent(main, DetailActivity.class);
+		// TODO: make this actually check to see if it's a favorite with SQL
 		i.putExtra("isFav", false);
-		i.putExtra(DetailActivity.TYPE, DetailActivity.CURRENT);
 		i.putExtra("weatherBundle", b);
 		main.startActivity(i);
 	}

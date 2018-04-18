@@ -6,6 +6,21 @@
     android:layout_height="match_parent"
     tools:context="me.willeccles.weathermaster.DetailActivity">
 
+    <ImageView
+        android:id="@+id/backgroundImage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop" />
+
+    <FrameLayout
+        android:id="@+id/fragmentFrame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#00000000"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/my_toolbar">
+    </FrameLayout>
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
         android:layout_width="match_parent"
@@ -14,27 +29,5 @@
         android:elevation="4dp"
         android:theme="@style/ThemeOverlay.AppCompat.ActionBar"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
-
-    <fragment
-        android:id="@+id/currentfragment"
-        android:name="me.willeccles.weathermaster.CurrentWeatherFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/my_toolbar" />
-
-    <fragment
-        android:id="@+id/forecastfragment"
-        android:name="me.willeccles.weathermaster.ForecastFragment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/my_toolbar" />
-
-    <ImageView
-        android:id="@+id/backgroundImage"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/my_toolbar" />
 
 </RelativeLayout>

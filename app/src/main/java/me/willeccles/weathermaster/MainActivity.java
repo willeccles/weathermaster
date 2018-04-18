@@ -35,11 +35,11 @@ public class MainActivity extends AppCompatActivity {
 
 	// when either of the weather buttons is pressed (since they are similar enough to warrant having the same callback)
 	protected void weatherButtonPressed(View v) {
+		String city = ((TextView)findViewById(R.id.cityName)).getText().toString().trim();
+		String zip = ((TextView)findViewById(R.id.zipCode)).getText().toString().trim();
 		switch (v.getId()) {
 			case R.id.buttonCurrent:
 				// go to the details after getting the weather
-				String city = ((TextView)findViewById(R.id.cityName)).getText().toString().trim();
-				String zip = ((TextView)findViewById(R.id.zipCode)).getText().toString().trim();
 				if (city.isEmpty() && zip.isEmpty()) {
 					Toast.makeText(this, "Please enter either a city name or a zip code.", Toast.LENGTH_SHORT).show();
 					break;
@@ -53,6 +53,16 @@ public class MainActivity extends AppCompatActivity {
 				break;
 
 			case R.id.buttonForecast:
+				if (city.isEmpty() && zip.isEmpty()) {
+					Toast.makeText(this, "Please enter either a city name or a zip code.", Toast.LENGTH_SHORT).show();
+					break;
+				}
+
+				if (!city.isEmpty()) {
+					new WeatherWorker(this).execute(WeatherWorker.getParams(true, city, "", 0.0, 0.0));
+				} else {
+					new WeatherWorker(this).execute(WeatherWorker.getParams(true, "", zip, 0.0, 0.0));
+				}
 				break;
 		}
 	}
@@ -62,13 +72,18 @@ public class MainActivity extends AppCompatActivity {
 		switch (item.getItemId()) {
 			case R.id.action_map:
 				// show the map view
-				Intent intent = new Intent(this, MapActivity.class);
-				startActivity(intent);
+				Intent mapIntent = new Intent(this, MapActivity.class);
+				startActivity(mapIntent);
 				return true;
 
 			case R.id.action_favorites:
-				Intent i = new Intent(this, FavoritesActivity.class);
-				startActivity(i);
+				Intent favIntent = new Intent(this, FavoritesActivity.class);
+				startActivity(favIntent);
+				return true;
+
+			case R.id.action_settings:
+				Intent settingsIntent = new Intent(this, SettingsActivity.class);
+				startActivity(settingsIntent);
 				return true;
 
 			default:
