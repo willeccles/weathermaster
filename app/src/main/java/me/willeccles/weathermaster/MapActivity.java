@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.PermissionChecker;
 import android.support.v7.app.AlertDialog;
@@ -15,17 +16,23 @@ import android.util.Log;
 import android.view.Menu;
 import android.widget.Toast;
 
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
-	MapView mapView;
+	MapFragment mapFrag;
 	GoogleMap map;
+	FusedLocationProviderClient mFusedLocationProviderClient;
 	public static final int PERMISSION_REQUEST_CODE = 24;
 
 	@Override
@@ -36,9 +43,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		myToolbar.setTitle("Choose Location");
 		setSupportActionBar(myToolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-		mapView = findViewById(R.id.mapView);
-		mapView.onCreate(savedInstanceState);
-		mapView.getMapAsync(this);
+		mapFrag = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
+		mapFrag.getMapAsync(this);
+		mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 	}
 
 	@Override
@@ -52,18 +59,45 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		map = mapView;
 
 		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-			// TODO: Consider calling
-			//    ActivityCompat#requestPermissions
-			// here to request the missing permissions, and then overriding
-			//   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-			//                                          int[] grantResults)
-			// to handle the case where the user grants the permission. See the documentation
-			// for ActivityCompat#requestPermissions for more details.
 			ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
 			return;
 		}
 
-		map.setMyLocationEnabled(true);
+		map.setMyLocationEnabled(false);
+		map.getUiSettings().setAllGesturesEnabled(false);
+		map.getUiSettings().setCompassEnabled(false);
+		map.getUiSettings().setIndoorLevelPickerEnabled(false);
+		map.getUiSettings().setMapToolbarEnabled(false);
+
+		final AppCompatActivity activity = this; // so that the dialog can finish this activity if needed
+
+		mFusedLocationProviderClient.getLastLocation().addOnSuccessListener(this, new OnSuccessListener<Location>() {
+			@Override
+			public void onSuccess(Location location) {
+				if (location == null) {
+					AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+					builder.setMessage(R.string.location_error_dialog).setTitle(R.string.location_error_dialog_title);
+					builder.setNeutralButton(R.string.ok, new DialogInterface.OnClickListener() {
+						@Override
+						public void onClick(DialogInterface dialog, int which) {
+							// this is actually irrelevent, we just want to show a button
+							return;
+						}
+					});
+					builder.setOnDismissListener(new DialogInterface.OnDismissListener() {
+						@Override
+						public void onDismiss(DialogInterface dialog) {
+							activity.finish();
+						}
+					});
+					builder.create().show();
+				} else {
+					CameraUpdate update = CameraUpdateFactory.newCameraPosition(new CameraPosition(new LatLng(location.getLatitude(), location.getLongitude()), 15, 0, 0));
+					map.moveCamera(update);
+				}
+			}
+		});
+
 		map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 	}
 
@@ -94,6 +128,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 			}
 		}
 
-		mapView.getMapAsync(this);
+		mapFrag.getMapAsync(this);
 	}
 }
