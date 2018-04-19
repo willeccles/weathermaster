@@ -49,8 +49,8 @@ public class DetailActivity extends AppCompatActivity implements CurrentWeatherF
 
 		String status; // used to set the background image
 		if (type == CURRENT) {
-			CurrentWeatherFragment cwf = CurrentWeatherFragment.newInstance(weatherBundle);
-			transaction.add(R.id.fragmentFrame, cwf);
+			DayFragment df = DayFragment.newInstance(weatherBundle);
+			transaction.add(R.id.fragmentFrame, df);
 			transaction.commit();
 			status = weatherBundle.getString("status");
 		} else {
@@ -61,7 +61,7 @@ public class DetailActivity extends AppCompatActivity implements CurrentWeatherF
 		}
 
 		// set the background image based on the weather
-		ImageView iv = findViewById(R.id.backgroundImage);
+		/*ImageView iv = findViewById(R.id.backgroundImage);
 		if (status.equals("Clouds")) {
 			iv.setImageResource(R.drawable.clouds);
 		} else if (status.equals("Rain")) {
@@ -70,8 +70,9 @@ public class DetailActivity extends AppCompatActivity implements CurrentWeatherF
 			iv.setImageResource(R.drawable.clear);
 		} else if (status.equals("Snow")) {
 			iv.setImageResource(R.drawable.snow);
-		}
+		}*/
 	}
+
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {

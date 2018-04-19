@@ -5,7 +5,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,7 +72,7 @@ public class ForecastFragment extends Fragment {
 	@Override
 	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
 		for (int i = 0; i < 5; i++) {
-			TextView dayTitle = view.findViewById(R.id.dayTitle + i);
+			TextView dayTitle = view.findViewById(R.id.dayNameTitle + i);
 			dayTitle.setText(w_daynames[i]);
 			TextView dayStat = view.findViewById(R.id.status + i);
 			dayStat.setText(w_statuses[i]);

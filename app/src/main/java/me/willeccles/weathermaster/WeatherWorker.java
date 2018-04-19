@@ -3,6 +3,7 @@ package me.willeccles.weathermaster;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -140,6 +141,9 @@ public class WeatherWorker extends AsyncTask<String, String, Bundle> {
 				JSONObject weatherObj = jobject.getJSONArray("weather").getJSONObject(0);
 				JSONObject mainObj = jobject.getJSONObject("main");
 				// fill stuff from the current weather
+				Date date = new Date(jobject.getLong("dt")*1000L);
+				SimpleDateFormat sdl = new SimpleDateFormat("EEEE");
+				resultBundle.putString("day", sdl.format(date));
 				resultBundle.putString("location", jobject.getString("name"));
 				resultBundle.putString("status", weatherObj.getString("main"));
 				resultBundle.putDouble("temp", mainObj.getDouble("temp"));
@@ -206,7 +210,9 @@ public class WeatherWorker extends AsyncTask<String, String, Bundle> {
 				}
 
 				temp_total /= 8.0; // get the average temperature for the day
-				dayBundle.putDoubleArray("temps", new double[]{temp_min, temp_total, temp_max});
+				dayBundle.putDouble("temp_min", temp_min);
+				dayBundle.putDouble("temp", temp_total);
+				dayBundle.putDouble("temp_max", temp_max);
 				forecastBundle.putBundle("day" + String.valueOf(day), dayBundle);
 			}
 		} catch (Exception e) {
