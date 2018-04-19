@@ -16,7 +16,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 
-public class DetailActivity extends AppCompatActivity implements CurrentWeatherFragment.OnFragmentInteractionListener, ForecastFragment.OnFragmentInteractionListener {
+public class DetailActivity extends AppCompatActivity {
 
 	// used to determine which type of details to show
 	public static final String TYPE = "type";
@@ -47,30 +47,17 @@ public class DetailActivity extends AppCompatActivity implements CurrentWeatherF
 		FragmentManager manager = getSupportFragmentManager();
 		FragmentTransaction transaction = manager.beginTransaction();
 
-		String status; // used to set the background image
 		if (type == CURRENT) {
 			DayFragment df = DayFragment.newInstance(weatherBundle);
 			transaction.add(R.id.fragmentFrame, df);
 			transaction.commit();
-			status = weatherBundle.getString("status");
 		} else {
-			ForecastFragment ff = ForecastFragment.newInstance(weatherBundle);
-			transaction.add(R.id.fragmentFrame, ff);
+			for (int i = 0; i < 5; i++) {
+				DayFragment df = DayFragment.newInstance(weatherBundle.getBundle("day" + String.valueOf(i)));
+				transaction.add(R.id.fragmentFrame, df);
+			}
 			transaction.commit();
-			status = weatherBundle.getBundle("day0").getString("status");
 		}
-
-		// set the background image based on the weather
-		/*ImageView iv = findViewById(R.id.backgroundImage);
-		if (status.equals("Clouds")) {
-			iv.setImageResource(R.drawable.clouds);
-		} else if (status.equals("Rain")) {
-			iv.setImageResource(R.drawable.rain);
-		} else if (status.equals("Clear")) {
-			iv.setImageResource(R.drawable.clear);
-		} else if (status.equals("Snow")) {
-			iv.setImageResource(R.drawable.snow);
-		}*/
 	}
 
 
@@ -108,10 +95,5 @@ public class DetailActivity extends AppCompatActivity implements CurrentWeatherF
 				return super.onOptionsItemSelected(item);
 
 		}
-	}
-
-	@Override
-	public void onFragmentInteraction(Uri uri) {
-
 	}
 }
