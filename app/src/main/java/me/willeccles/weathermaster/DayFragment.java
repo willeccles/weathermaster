@@ -50,13 +50,14 @@ public class DayFragment extends Fragment {
 			w_dayStatus = day.getString("status");
 			if (w_dayStatus.equals("Clouds"))
 				backgroundId = R.drawable.clouds;
-			if (w_dayStatus.equals("Rain"))
+			else if (w_dayStatus.equals("Rain"))
 				backgroundId = R.drawable.rain;
-			if (w_dayStatus.equals("Clear"))
+			else if (w_dayStatus.equals("Clear"))
 				backgroundId = R.drawable.clear;
-			if (w_dayStatus.equals("Snow"))
+			else if (w_dayStatus.equals("Snow"))
 				backgroundId = R.drawable.snow;
-			backgroundId =  0;
+			else backgroundId =  0;
+			// TODO: add Mist
 			w_dayTitle = day.getString("day");
 			w_temp = String.format("%.1fº", WeatherWorker.convertTemp(getContext(), day.getDouble("temp")));
 			w_tempLowHigh = String.format("Low: %.1fº, High: %.1f",
