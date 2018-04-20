@@ -12,17 +12,21 @@
     app:cardElevation="4dp"
     tools:context="me.willeccles.weathermaster.DayFragment">
 
-    <ImageView
-        android:id="@+id/backgroundImageView"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/clear" />
-
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#2f000000">
+        android:id="@+id/container" >
+
+        <ImageView
+            android:id="@+id/backgroundImageView"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/clouds"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/dayNameTitle"
@@ -34,6 +38,10 @@
             android:textColor="#ffffff"
             android:textSize="36sp"
             android:textStyle="bold"
+            android:shadowColor="#af000000"
+            android:shadowDy="0"
+            android:shadowDx="0"
+            android:shadowRadius="10"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -47,6 +55,10 @@
             android:textColor="#ffffff"
             android:textSize="24sp"
             android:textStyle="bold"
+            android:shadowColor="#af000000"
+            android:shadowDy="0"
+            android:shadowDx="0"
+            android:shadowRadius="10"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dayNameTitle" />
 
@@ -59,6 +71,10 @@
             android:text="Temperature: 69º"
             android:textColor="#ffffff"
             android:textSize="18sp"
+            android:shadowColor="#af000000"
+            android:shadowDy="0"
+            android:shadowDx="0"
+            android:shadowRadius="10"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/statusLabel" />
 
@@ -71,6 +87,10 @@
             android:layout_marginTop="8dp"
             android:text="Low: 20º, High: 40º"
             android:textColor="#ffffff"
+            android:shadowColor="#af000000"
+            android:shadowDy="0"
+            android:shadowDx="0"
+            android:shadowRadius="10"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/tempLabel" />
