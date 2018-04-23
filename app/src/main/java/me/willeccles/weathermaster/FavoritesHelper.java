@@ -13,7 +13,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class FavoritesHelper extends SQLiteOpenHelper {
 	public static final String DATABASE_NAME = "mylist.db";
 	public static final String TABLE_NAME = "mylist_data";
-	public static final String COL1 = "_id";
+	public static final String COL1 = "ID";
 	public static final String COL2 = "TITLE";
 	public static final String COL3 = "CITYID";
 
@@ -24,7 +24,7 @@ public class FavoritesHelper extends SQLiteOpenHelper {
 	//Creates the table for the dara
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		String createTable = "CREATE TABLE " + TABLE_NAME + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
+		String createTable = "CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
 				"TITLE TEXT, CITYID INT)";
 		db.execSQL(createTable);
 	}
@@ -37,7 +37,7 @@ public class FavoritesHelper extends SQLiteOpenHelper {
 	//adds the data by taking the values and putting them into the database
 	public boolean saveFavorite(String name, int cityID) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		Cursor prevdata = db.rawQuery(String.format("SELECT * FROM %s WHERE %s='%s' OR %s=%d;", TABLE_NAME, COL2, name, COL3, cityID), null);
+		Cursor prevdata = db.rawQuery(String.format("SELECT ID _id,* FROM %s WHERE %s='%s' OR %s=%d;", TABLE_NAME, COL2, name, COL3, cityID), null);
 		if (prevdata.getCount() != 0) return false;
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(COL2, name);
@@ -55,13 +55,13 @@ public class FavoritesHelper extends SQLiteOpenHelper {
 	//get the contents tp then be able to display the data
 	public Cursor getFavorites() {
 		SQLiteDatabase db = this.getWritableDatabase();
-		Cursor data = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
+		Cursor data = db.rawQuery("SELECT ID _id,* FROM " + TABLE_NAME, null);
 		return data;
 	}
 
 	public Cursor getFavoritesByName(String name) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		return db.rawQuery(String.format("SELECT * FROM %s WHERE %s='%s';", TABLE_NAME, COL2, name), null);
+		return db.rawQuery(String.format("SELECT ID _id,* FROM %s WHERE %s='%s';", TABLE_NAME, COL2, name), null);
 	}
 
 	public void removeFavorite(String name, int cityID) {
@@ -77,7 +77,7 @@ public class FavoritesHelper extends SQLiteOpenHelper {
 
 	public boolean isFavorite(String name, int id) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		Cursor data = db.rawQuery(String.format("SELECT * FROM %s WHERE %s='%s' OR %s=%d;", TABLE_NAME, COL2, name, COL3, id), null);
+		Cursor data = db.rawQuery(String.format("SELECT ID _id,* FROM %s WHERE %s='%s' OR %s=%d;", TABLE_NAME, COL2, name, COL3, id), null);
 		return data.getCount() != 0;
 	}
 }

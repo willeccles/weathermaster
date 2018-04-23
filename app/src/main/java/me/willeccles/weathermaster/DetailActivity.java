@@ -65,7 +65,7 @@ public class DetailActivity extends AppCompatActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.detail_toolbar, menu);
 		if (isFavorite)
-			((MenuView.ItemView)findViewById(R.id.action_favorite)).setIcon(getDrawable(R.drawable.ic_favorite_black_24dp));
+			menu.findItem(R.id.action_favorite).setIcon(getDrawable(R.drawable.ic_favorite_black_24dp));
 		return true;
 	}
 

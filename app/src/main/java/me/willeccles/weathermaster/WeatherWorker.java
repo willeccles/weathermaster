@@ -51,6 +51,10 @@ public class WeatherWorker extends AsyncTask<String, String, Bundle> {
 		return new String[]{forecast?"forecast":"current", location, zip, String.valueOf(lat), String.valueOf(lon)};
 	}
 
+	public static String[] getParams(boolean forecast, int id) {
+		return new String[]{forecast?"forecast":"current", "BYID", String.valueOf(id)};
+	}
+
 	/**
 	 * Convert a Kelvin value to Celsius.
 	 * @param k The value in Kelvin.
@@ -101,14 +105,19 @@ public class WeatherWorker extends AsyncTask<String, String, Bundle> {
 		String queryFlag = "";
 		String queryParams = "";
 
-		if (!strings[1].trim().isEmpty()) {
-			queryFlag = "q=%s";
-			queryParams = strings[1].trim();
-		} else if (strings[2].trim().matches("\\d{5}")) {
-			queryFlag = "zip=%s,us";
-			queryParams = strings[2].trim();
+		if (strings[1].equals("BYID")) {
+			queryFlag = "id=%s";
+			queryParams = strings[2];
 		} else {
-			queryFlag = "lat=%s&lon=%s";
+			if (!strings[1].trim().isEmpty()) {
+				queryFlag = "q=%s";
+				queryParams = strings[1].trim();
+			} else if (strings[2].trim().matches("\\d{5}")) {
+				queryFlag = "zip=%s,us";
+				queryParams = strings[2].trim();
+			} else {
+				queryFlag = "lat=%s&lon=%s";
+			}
 		}
 
 		try {

@@ -26,6 +26,16 @@ public class FavArrayAdapter extends CursorAdapter {
 	}
 
 	@Override
+	public Cursor getCursor() {
+		return super.getCursor();
+	}
+
+	public void removeItem(int pos) {
+		getCursor().moveToPosition(pos);
+		this.notifyDataSetChanged();
+	}
+
+	@Override
 	protected Object clone() throws CloneNotSupportedException {
 		return super.clone();
 	}
