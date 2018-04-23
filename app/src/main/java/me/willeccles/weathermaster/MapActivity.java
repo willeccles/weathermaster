@@ -1,8 +1,10 @@
 package me.willeccles.weathermaster;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.support.v4.app.ActivityCompat;
@@ -14,6 +16,7 @@ import android.support.v7.view.menu.MenuView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -32,20 +35,24 @@ import com.google.android.gms.tasks.OnSuccessListener;
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 	MapFragment mapFrag;
 	GoogleMap map;
+	Location userLocation = null;
 	FusedLocationProviderClient mFusedLocationProviderClient;
 	public static final int PERMISSION_REQUEST_CODE = 24;
+	private int doneOption = SettingsActivity.MAP_CURRENT;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
 		Toolbar myToolbar = findViewById(R.id.my_toolbar);
-		myToolbar.setTitle("Choose Location");
+		myToolbar.setTitle("Your Location");
 		setSupportActionBar(myToolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		mapFrag = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
 		mapFrag.getMapAsync(this);
 		mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
+		SharedPreferences pref = getSharedPreferences(getString(R.string.prefFileKey), Context.MODE_PRIVATE);
+		doneOption = pref.getInt(getString(R.string.map_done_pref_name), SettingsActivity.MAP_CURRENT);
 	}
 
 	@Override
@@ -94,6 +101,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 				} else {
 					CameraUpdate update = CameraUpdateFactory.newCameraPosition(new CameraPosition(new LatLng(location.getLatitude(), location.getLongitude()), 15, 0, 0));
 					map.moveCamera(update);
+					userLocation = location;
 				}
 			}
 		});
@@ -129,5 +137,23 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		}
 
 		mapFrag.getMapAsync(this);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+			case R.id.action_done:
+				if (userLocation == null) return false;
+				if (doneOption == SettingsActivity.MAP_CURRENT)
+					new WeatherWorker(this).execute(WeatherWorker.getParams(false, "", "", userLocation.getLatitude(), userLocation.getLongitude()));
+				else
+					new WeatherWorker(this).execute(WeatherWorker.getParams(true, "", "", userLocation.getLatitude(), userLocation.getLongitude()));
+				return true;
+
+			default:
+				// If we got here, the user's action was not recognized.
+				// Invoke the superclass to handle it.
+				return super.onOptionsItemSelected(item);
+		}
 	}
 }

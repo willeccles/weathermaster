@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.action_map:
+			case R.id.action_location:
 				// show the map view
 				Intent mapIntent = new Intent(this, MapActivity.class);
 				startActivity(mapIntent);

@@ -36,8 +36,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".DetailActivity"
-            android:parentActivityName=".MainActivity" />
+            android:name=".DetailActivity" /> <!-- no parent needed, see class for details -->
         <activity
             android:name=".MapActivity"
             android:parentActivityName=".MainActivity" />

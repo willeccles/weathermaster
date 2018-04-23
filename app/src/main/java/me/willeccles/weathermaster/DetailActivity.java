@@ -89,6 +89,11 @@ public class DetailActivity extends AppCompatActivity {
 				toggleFavorite();
 				return true;
 
+			case android.R.id.home:
+				// this circumvents the parent activity so that you can always go back to the previous display
+				finish();
+				return true;
+
 			default:
 				// If we got here, the user's action was not recognized.
 				// Invoke the superclass to handle it.

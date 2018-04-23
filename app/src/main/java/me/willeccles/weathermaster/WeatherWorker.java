@@ -32,9 +32,9 @@ public class WeatherWorker extends AsyncTask<String, String, Bundle> {
 	static String KEY = "0f0d5c7b1e715210f113b114b66acfb3";
 	static int C = 0;
 	static int F = 1;
-	private MainActivity main;
+	private AppCompatActivity main;
 
-	public WeatherWorker(MainActivity m) {
+	public WeatherWorker(AppCompatActivity m) {
 		main = m;
 	}
 

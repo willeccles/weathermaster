@@ -14,7 +14,7 @@ public class FavoritesHelper extends SQLiteOpenHelper {
     public static final String DATABASE_NAME = "mylist.db";
     public static final String TABLE_NAME = "mylist_data";
     public static final String COL1 = "ID";
-    public static final String COL2 = "ITEM1";
+    public static final String COL2 = "NAME";
     public FavoritesHelper(Context context) {
         super(context,DATABASE_NAME,null,1);
     }
@@ -23,7 +23,7 @@ public class FavoritesHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         String createTable = "CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
-                "ITEM1 TEXT)";
+                "NAME TEXT)";
         db.execSQL(createTable);
     }
 
@@ -31,6 +31,7 @@ public class FavoritesHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
     }
+
     //adds the data by taking the values and putting them into the database
     public boolean saveFavorite(String item1) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -45,12 +46,14 @@ public class FavoritesHelper extends SQLiteOpenHelper {
             return true;
         }
     }
+
     //get the contents tp then be able to display the data
     public Cursor getFavorites() {
         SQLiteDatabase db = this.getWritableDatabase();
         Cursor data = db.rawQuery("SELECT * FROM " + TABLE_NAME, null);
         return data;
     }
+
     //delete all the data in the db
     public void removeFavorite() {
         SQLiteDatabase db = this.getWritableDatabase();
