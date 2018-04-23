@@ -50,7 +50,7 @@ public class FavoritesActivity extends AppCompatActivity {
 
 		final FavoritesActivity thisRef = this;
 		SharedPreferences prefs = getSharedPreferences(getString(R.string.prefFileKey), Context.MODE_PRIVATE);
-		final boolean _forecast = (prefs.getInt(getString(R.string.map_done_pref_name), SettingsActivity.MAP_CURRENT) == SettingsActivity.MAP_FORECAST);
+		final boolean _forecast = (prefs.getInt(getString(R.string.map_done_pref_name), SettingsActivity.MAP_FORECAST) == SettingsActivity.MAP_FORECAST);
 		lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

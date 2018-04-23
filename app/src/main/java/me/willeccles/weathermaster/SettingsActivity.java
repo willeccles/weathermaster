@@ -31,7 +31,7 @@ public class SettingsActivity extends AppCompatActivity {
 		RadioGroup rg = findViewById(R.id.radioGroup);
 		RadioGroup rg2 = findViewById(R.id.mapOptionRadioGroup);
 		lastTempPref = sharedPrefs.getInt(getString(R.string.unitPrefKey), WeatherWorker.C);
-		lastMapDonePref = sharedPrefs.getInt(getString(R.string.map_done_pref_name), MAP_CURRENT);
+		lastMapDonePref = sharedPrefs.getInt(getString(R.string.map_done_pref_name), MAP_FORECAST);
 		if (lastTempPref == WeatherWorker.C) {
 			rg.check(R.id.celsiusButton);
 		} else {
