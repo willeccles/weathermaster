@@ -1,13 +1,16 @@
 package me.willeccles.weathermaster;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ListView;
 
 public class FavoritesActivity extends AppCompatActivity {
+	FavoritesHelper fHelper;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +20,10 @@ public class FavoritesActivity extends AppCompatActivity {
 		myToolbar.setTitle("Favorite Locations");
 		setSupportActionBar(myToolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+		ListView lv = findViewById(R.id.fav_list);
+		fHelper = new FavoritesHelper(this);
+		Cursor favs = fHelper.getFavorites();
+		lv.setAdapter(new FavArrayAdapter(this, favs));
 	}
 
 	@Override
