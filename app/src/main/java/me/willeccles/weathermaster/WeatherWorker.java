@@ -192,7 +192,7 @@ public class WeatherWorker extends AsyncTask<String, String, Bundle> {
 			sdf.setTimeZone(TimeZone.getDefault());
 			String dayString;
 			forecastBundle.putString("location", jobject.getJSONObject("city").getString("name"));
-			forecastBundle.putString("id", jobject.getJSONObject("city").getString("id"));
+			forecastBundle.putInt("id", jobject.getJSONObject("city").getInt("id"));
 
 			// iterate through all 8 samples for all 5 days
 			for (int day = 0; day < 5; day++) {
