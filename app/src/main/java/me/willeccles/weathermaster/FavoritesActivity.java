@@ -63,7 +63,6 @@ public class FavoritesActivity extends AppCompatActivity {
 		lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> parent, final View view, final int position, long id) {
-				Toast.makeText(thisRef, "alksdjflkajdsf", Toast.LENGTH_SHORT).show();
 				AlertDialog.Builder builder = new AlertDialog.Builder(thisRef);
 				builder.setMessage(R.string.confirm_delete_title).setMessage(R.string.confirm_delete_message);
 				builder.setNegativeButton("Nope", new DialogInterface.OnClickListener() {
