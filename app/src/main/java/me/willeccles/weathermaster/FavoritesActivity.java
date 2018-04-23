@@ -7,7 +7,10 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class FavoritesActivity extends AppCompatActivity {
 	FavoritesHelper fHelper;
@@ -21,9 +24,17 @@ public class FavoritesActivity extends AppCompatActivity {
 		setSupportActionBar(myToolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		ListView lv = findViewById(R.id.fav_list);
+		TextView placeholder = findViewById(R.id.placeholder);
 		fHelper = new FavoritesHelper(this);
 		Cursor favs = fHelper.getFavorites();
-		lv.setAdapter(new FavArrayAdapter(this, favs));
+		if (favs.getCount() == 0) {
+			placeholder.setVisibility(View.VISIBLE);
+			lv.setVisibility(View.INVISIBLE);
+		} else {
+			placeholder.setVisibility(View.INVISIBLE);
+			lv.setVisibility(View.VISIBLE);
+			lv.setAdapter(new FavArrayAdapter(this, favs));
+		}
 	}
 
 	@Override
@@ -45,5 +56,9 @@ public class FavoritesActivity extends AppCompatActivity {
 				return super.onOptionsItemSelected(item);
 
 		}
+	}
+
+	public void listItemClicked(View view) {
+		Toast.makeText(this, "laskdfjlaskjdf", Toast.LENGTH_SHORT).show();
 	}
 }

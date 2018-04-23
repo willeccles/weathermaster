@@ -72,12 +72,10 @@ public class DetailActivity extends AppCompatActivity {
 	// used to toggle whether or not the current location is a favorite
 	private void toggleFavorite() {
 		if (isFavorite) {
-			// TODO set to not be a favorite in SQL here
-
+			new FavoritesHelper(this).removeFavorite(weatherBundle.getString("location"), weatherBundle.getInt("id"));
 			((MenuView.ItemView)findViewById(R.id.action_favorite)).setIcon(getDrawable(R.drawable.ic_favorite_border_black_24dp));
 		} else {
-			// TODO set it to be a favorite in SQL
-
+			new FavoritesHelper(this).saveFavorite(weatherBundle.getString("location"), weatherBundle.getInt("id"));
 			((MenuView.ItemView)findViewById(R.id.action_favorite)).setIcon(getDrawable(R.drawable.ic_favorite_black_24dp));
 		}
 	}

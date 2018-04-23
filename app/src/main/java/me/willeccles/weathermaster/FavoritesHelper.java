@@ -13,7 +13,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class FavoritesHelper extends SQLiteOpenHelper {
 	public static final String DATABASE_NAME = "mylist.db";
 	public static final String TABLE_NAME = "mylist_data";
-	public static final String COL1 = "ID";
+	public static final String COL1 = "_id";
 	public static final String COL2 = "TITLE";
 	public static final String COL3 = "CITYID";
 
@@ -24,7 +24,7 @@ public class FavoritesHelper extends SQLiteOpenHelper {
 	//Creates the table for the dara
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		String createTable = "CREATE TABLE " + TABLE_NAME + " (ID INTEGER PRIMARY KEY AUTOINCREMENT, " +
+		String createTable = "CREATE TABLE " + TABLE_NAME + " (_id INTEGER PRIMARY KEY AUTOINCREMENT, " +
 				"TITLE TEXT, CITYID INT)";
 		db.execSQL(createTable);
 	}
@@ -73,5 +73,11 @@ public class FavoritesHelper extends SQLiteOpenHelper {
 	public void removeAllFavorites() {
 		SQLiteDatabase db = this.getWritableDatabase();
 		db.execSQL("DELETE FROM " + TABLE_NAME);
+	}
+
+	public boolean isFavorite(String name, int id) {
+		SQLiteDatabase db = this.getWritableDatabase();
+		Cursor data = db.rawQuery(String.format("SELECT * FROM %s WHERE %s='%s' OR %s=%d;", TABLE_NAME, COL2, name, COL3, id), null);
+		return data.getCount() != 0;
 	}
 }

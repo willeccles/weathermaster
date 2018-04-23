@@ -144,6 +144,7 @@ public class WeatherWorker extends AsyncTask<String, String, Bundle> {
 				Date date = new Date(jobject.getLong("dt")*1000L);
 				SimpleDateFormat sdl = new SimpleDateFormat("EEEE");
 				resultBundle.putString("day", sdl.format(date));
+				resultBundle.putInt("id", jobject.getInt("id"));
 				resultBundle.putString("location", jobject.getString("name"));
 				resultBundle.putString("status", weatherObj.getString("main"));
 				resultBundle.putDouble("temp", mainObj.getDouble("temp"));
@@ -182,6 +183,7 @@ public class WeatherWorker extends AsyncTask<String, String, Bundle> {
 			sdf.setTimeZone(TimeZone.getDefault());
 			String dayString;
 			forecastBundle.putString("location", jobject.getJSONObject("city").getString("name"));
+			forecastBundle.putString("id", jobject.getJSONObject("city").getString("id"));
 
 			// iterate through all 8 samples for all 5 days
 			for (int day = 0; day < 5; day++) {
@@ -227,8 +229,8 @@ public class WeatherWorker extends AsyncTask<String, String, Bundle> {
 	protected void onPostExecute(Bundle b) {
 		super.onPostExecute(b);
 		Intent i = new Intent(main, DetailActivity.class);
-		// TODO: make this actually check to see if it's a favorite with SQL
-		i.putExtra("isFav", false);
+		boolean isFav = new FavoritesHelper(main).isFavorite(b.getString("location"), b.getInt("id"));
+		i.putExtra("isFav", isFav);
 		i.putExtra("weatherBundle", b);
 		main.startActivity(i);
 	}
