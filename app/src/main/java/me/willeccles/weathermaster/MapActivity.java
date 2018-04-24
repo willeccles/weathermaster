@@ -27,15 +27,17 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 
-public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener {
 	MapFragment mapFrag;
 	GoogleMap map;
-	Location userLocation = null;
+	LatLng userLocation = null;
 	FusedLocationProviderClient mFusedLocationProviderClient;
 	public static final int PERMISSION_REQUEST_CODE = 24;
 	private int doneOption = SettingsActivity.MAP_CURRENT;
@@ -45,7 +47,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
 		Toolbar myToolbar = findViewById(R.id.my_toolbar);
-		myToolbar.setTitle("Your Location");
+		myToolbar.setTitle("Location");
 		setSupportActionBar(myToolbar);
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		mapFrag = (MapFragment) getFragmentManager().findFragmentById(R.id.mapFragment);
@@ -53,6 +55,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 		SharedPreferences pref = getSharedPreferences(getString(R.string.prefFileKey), Context.MODE_PRIVATE);
 		doneOption = pref.getInt(getString(R.string.map_done_pref_name), SettingsActivity.MAP_FORECAST);
+		Toast.makeText(this, "Long press to place a marker to use instead of your location.", Toast.LENGTH_LONG).show();
 	}
 
 	@Override
@@ -64,6 +67,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 	@Override
 	public void onMapReady(GoogleMap mapView) {
 		map = mapView;
+		map.setOnMapLongClickListener(this);
 
 		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
 			ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, PERMISSION_REQUEST_CODE);
@@ -71,7 +75,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		}
 
 		map.setMyLocationEnabled(true);
-		map.getUiSettings().setAllGesturesEnabled(false);
+		map.getUiSettings().setAllGesturesEnabled(true);
+		map.getUiSettings().setRotateGesturesEnabled(false);
 		map.getUiSettings().setCompassEnabled(false);
 		map.getUiSettings().setIndoorLevelPickerEnabled(false);
 		map.getUiSettings().setMapToolbarEnabled(false);
@@ -99,9 +104,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 					});
 					builder.create().show();
 				} else {
-					CameraUpdate update = CameraUpdateFactory.newCameraPosition(new CameraPosition(new LatLng(location.getLatitude(), location.getLongitude()), 15, 0, 0));
+					CameraUpdate update = CameraUpdateFactory.newCameraPosition(new CameraPosition(new LatLng(location.getLatitude(), location.getLongitude()), 13, 0, 0));
 					map.moveCamera(update);
-					userLocation = location;
+					userLocation = new LatLng(location.getLatitude(), location.getLongitude());
 				}
 			}
 		});
@@ -145,9 +150,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 			case R.id.action_done:
 				if (userLocation == null) return false;
 				if (doneOption == SettingsActivity.MAP_CURRENT)
-					new WeatherWorker(this).execute(WeatherWorker.getParams(false, "", "", userLocation.getLatitude(), userLocation.getLongitude()));
+					new WeatherWorker(this).execute(WeatherWorker.getParams(false, "", "", userLocation.latitude, userLocation.longitude));
 				else
-					new WeatherWorker(this).execute(WeatherWorker.getParams(true, "", "", userLocation.getLatitude(), userLocation.getLongitude()));
+					new WeatherWorker(this).execute(WeatherWorker.getParams(true, "", "", userLocation.latitude, userLocation.longitude));
 				return true;
 
 			default:
@@ -155,5 +160,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 				// Invoke the superclass to handle it.
 				return super.onOptionsItemSelected(item);
 		}
+	}
+
+	@Override
+	public void onMapLongClick(LatLng latLng) {
+		map.clear();
+		MarkerOptions options = new MarkerOptions().title("Custom Location")
+				.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_place_red_36dp))
+				.anchor(0.5f, 1f);
+		options.position(latLng);
+		map.addMarker(options);
+		userLocation = latLng;
+		map.animateCamera(CameraUpdateFactory.newLatLng(latLng));
 	}
 }
