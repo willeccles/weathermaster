@@ -52,7 +52,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		mapFrag.getMapAsync(this);
 		mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 		SharedPreferences pref = getSharedPreferences(getString(R.string.prefFileKey), Context.MODE_PRIVATE);
-		doneOption = pref.getInt(getString(R.string.map_done_pref_name), SettingsActivity.MAP_CURRENT);
+		doneOption = pref.getInt(getString(R.string.map_done_pref_name), SettingsActivity.MAP_FORECAST);
 	}
 
 	@Override
