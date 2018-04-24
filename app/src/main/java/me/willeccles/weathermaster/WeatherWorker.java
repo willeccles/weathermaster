@@ -1,11 +1,13 @@
 package me.willeccles.weathermaster;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
@@ -237,10 +239,22 @@ public class WeatherWorker extends AsyncTask<String, String, Bundle> {
 	@Override
 	protected void onPostExecute(Bundle b) {
 		super.onPostExecute(b);
-		Intent i = new Intent(main, DetailActivity.class);
-		boolean isFav = new FavoritesHelper(main).isFavorite(b.getString("location"), b.getInt("id"));
-		i.putExtra("isFav", isFav);
-		i.putExtra("weatherBundle", b);
-		main.startActivity(i);
+		if (b == null) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(main);
+			builder.setMessage(R.string.weather_error_message).setTitle(R.string.weather_error_title);
+			builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					// basically just do nothing, this is just here to dismiss the dialog
+				}
+			});
+			builder.create().show();
+		} else {
+			Intent i = new Intent(main, DetailActivity.class);
+			boolean isFav = new FavoritesHelper(main).isFavorite(b.getString("location"), b.getInt("id"));
+			i.putExtra("isFav", isFav);
+			i.putExtra("weatherBundle", b);
+			main.startActivity(i);
+		}
 	}
 }

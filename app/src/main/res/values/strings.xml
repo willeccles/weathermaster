@@ -12,4 +12,8 @@
     <string name="map_done_pref_name">MAP_DONE_PREF</string>
     <string name="confirm_delete_title">Delete favorite?</string>
     <string name="confirm_delete_message">Are you sure you want to delete this favorite?</string>
+    <string name="weather_error_message">You may have entered an invalid location, or the weather service may be down.</string>
+    <string name="weather_error_title">Error Retrieving Weather</string>
+    <string name="confirm_delete_all_message">This will delete all of your favorite locations!</string>
+    <string name="confirm_delete_all_title">Are you sure?</string>
 </resources>

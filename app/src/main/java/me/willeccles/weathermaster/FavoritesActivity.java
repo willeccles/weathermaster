@@ -112,6 +112,27 @@ public class FavoritesActivity extends AppCompatActivity {
 		switch (item.getItemId()) {
 			case R.id.clearAll:
 				// this should show a popup to confirm whether or not the user wants to clear all favorites
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setMessage(R.string.confirm_delete_all_message).setTitle(R.string.confirm_delete_all_title);
+				builder.setPositiveButton("Yep", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// delete all favorites
+						fHelper.removeAllFavorites();
+						far.changeCursor(fHelper.getFavorites());
+						far.notifyDataSetChanged();
+						TextView placeholder = findViewById(R.id.placeholder);
+						if (far.getCursor().getCount() == 0)
+							placeholder.setVisibility(View.VISIBLE);
+					}
+				});
+				builder.setNegativeButton("Nope", new DialogInterface.OnClickListener() {
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						// do nothing
+					}
+				});
+				builder.create().show();
 				return true;
 
 			default:
