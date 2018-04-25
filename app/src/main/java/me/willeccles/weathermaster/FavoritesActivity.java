@@ -1,6 +1,5 @@
 package me.willeccles.weathermaster;
 
-import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -9,7 +8,6 @@ import android.database.Cursor;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -106,36 +104,12 @@ public class FavoritesActivity extends AppCompatActivity {
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.fav_toolbar, menu);
-
-		MenuItem searchItem = menu.findItem(R.id.action_search);
-
-		SearchManager manager = (SearchManager) FavoritesActivity.this.getSystemService(Context.SEARCH_SERVICE);
-
-		SearchView sview = null;
-		if (searchItem != null) {
-			sview = (SearchView) searchItem.getActionView();
-		}
-		if (sview != null) {
-			sview.setSearchableInfo(manager.getSearchableInfo(FavoritesActivity.this.getComponentName()));
-		}
-		return super.onCreateOptionsMenu(menu);
-	}
-
-	@Override
-	public boolean onSearchRequested() {
-		// just in case we need to do something before searching,
-		// otherwise this method is just redundant
-		return super.onSearchRequested();
+		return true;
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.action_search:
-				// search the favorite locations
-				onSearchRequested();
-				return true;
-
 			case R.id.clearAll:
 				// this should show a popup to confirm whether or not the user wants to clear all favorites
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
