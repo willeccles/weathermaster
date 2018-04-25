@@ -17,4 +17,5 @@
     <string name="confirm_delete_all_message">This will delete all of your favorite locations!</string>
     <string name="confirm_delete_all_title">Are you sure?</string>
     <string name="share_title">Share Weather</string>
+    <string name="search_hint">Search Favorites</string>
 </resources>
