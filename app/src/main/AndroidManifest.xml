@@ -28,7 +28,9 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCukehkmiCHbKQ6RrrITj_OBEUMVUHgiuc" />
 
-        <activity android:name=".MainActivity">
+        <activity
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -36,17 +38,22 @@
             </intent-filter>
         </activity>
         <activity
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:name=".DetailActivity" /> <!-- no parent needed, see class for details -->
         <activity
             android:name=".MapActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".FavoritesActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".SettingsActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".AboutActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
             android:parentActivityName=".SettingsActivity" />
     </application>
 
