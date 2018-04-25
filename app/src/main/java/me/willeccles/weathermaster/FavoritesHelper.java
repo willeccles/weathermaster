@@ -3,8 +3,10 @@ package me.willeccles.weathermaster;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 /**
  * Created by mattc on 4/18/2018.
@@ -37,7 +39,7 @@ public class FavoritesHelper extends SQLiteOpenHelper {
 	//adds the data by taking the values and putting them into the database
 	public boolean saveFavorite(String name, int cityID) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		Cursor prevdata = db.rawQuery(String.format("SELECT ID _id,* FROM %s WHERE %s='%s' OR %s=%d;", TABLE_NAME, COL2, name, COL3, cityID), null);
+		Cursor prevdata = db.rawQuery(String.format("SELECT ID _id,* FROM %s WHERE %s=%s OR %s=%d;", TABLE_NAME, COL2, DatabaseUtils.sqlEscapeString(name), COL3, cityID), null);
 		if (prevdata.getCount() != 0) return false;
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(COL2, name);
@@ -59,14 +61,20 @@ public class FavoritesHelper extends SQLiteOpenHelper {
 		return data;
 	}
 
+	public Cursor getSearchMatches(String query) {
+		String queryCommand = String.format("SELECT ID _id,* FROM %s WHERE %s LIKE %s;", TABLE_NAME, COL2, DatabaseUtils.sqlEscapeString(query + "*"));
+		Log.d("lsdkfjlas", DatabaseUtils.sqlEscapeString(query+"*"));
+		return this.getWritableDatabase().rawQuery(queryCommand, null);
+	}
+
 	public Cursor getFavoritesByName(String name) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		return db.rawQuery(String.format("SELECT ID _id,* FROM %s WHERE %s='%s';", TABLE_NAME, COL2, name), null);
+		return db.rawQuery(String.format("SELECT ID _id,* FROM %s WHERE %s=%s;", TABLE_NAME, COL2, DatabaseUtils.sqlEscapeString(name)), null);
 	}
 
 	public void removeFavorite(String name, int cityID) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		db.execSQL(String.format("DELETE FROM %s WHERE %s='%s' AND %s=%d;", TABLE_NAME, COL2, name, COL3, cityID));
+		db.execSQL(String.format("DELETE FROM %s WHERE %s=%s AND %s=%d;", TABLE_NAME, COL2, DatabaseUtils.sqlEscapeString(name), COL3, cityID));
 	}
 
 	//delete all the data in the db
@@ -77,7 +85,7 @@ public class FavoritesHelper extends SQLiteOpenHelper {
 
 	public boolean isFavorite(String name, int id) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		Cursor data = db.rawQuery(String.format("SELECT ID _id,* FROM %s WHERE %s='%s' OR %s=%d;", TABLE_NAME, COL2, name, COL3, id), null);
+		Cursor data = db.rawQuery(String.format("SELECT ID _id,* FROM %s WHERE %s=%s OR %s=%d;", TABLE_NAME, COL2, DatabaseUtils.sqlEscapeString(name), COL3, id), null);
 		return data.getCount() != 0;
 	}
 }

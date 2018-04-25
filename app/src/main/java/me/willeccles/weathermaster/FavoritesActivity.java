@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -109,16 +110,16 @@ public class FavoritesActivity extends AppCompatActivity {
 
 		MenuItem searchItem = menu.findItem(R.id.action_search);
 
-		SearchManager manager = (SearchManager) FavoritesActivity.this.getSystemService(Context.SEARCH_SERVICE);
+		SearchManager manager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
 		SearchView sview = null;
 		if (searchItem != null) {
 			sview = (SearchView) searchItem.getActionView();
 		}
 		if (sview != null) {
-			sview.setSearchableInfo(manager.getSearchableInfo(FavoritesActivity.this.getComponentName()));
+			sview.setSearchableInfo(manager.getSearchableInfo(getComponentName()));
 		}
-		return super.onCreateOptionsMenu(menu);
+		return true;
 	}
 
 	@Override
@@ -131,11 +132,6 @@ public class FavoritesActivity extends AppCompatActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-			case R.id.action_search:
-				// search the favorite locations
-				onSearchRequested();
-				return true;
-
 			case R.id.clearAll:
 				// this should show a popup to confirm whether or not the user wants to clear all favorites
 				AlertDialog.Builder builder = new AlertDialog.Builder(this);
