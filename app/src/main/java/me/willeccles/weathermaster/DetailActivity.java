@@ -65,7 +65,7 @@ public class DetailActivity extends AppCompatActivity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.detail_toolbar, menu);
 		if (isFavorite)
-			menu.findItem(R.id.action_favorite).setIcon(getDrawable(R.drawable.ic_favorite_black_24dp));
+			menu.findItem(R.id.action_favorite).setIcon(getDrawable(R.drawable.ic_favorite_white_24dp));
 		return true;
 	}
 
@@ -73,10 +73,10 @@ public class DetailActivity extends AppCompatActivity {
 	private void toggleFavorite() {
 		if (isFavorite) {
 			new FavoritesHelper(this).removeFavorite(weatherBundle.getString("location"), weatherBundle.getInt("id"));
-			((MenuView.ItemView)findViewById(R.id.action_favorite)).setIcon(getDrawable(R.drawable.ic_favorite_border_black_24dp));
+			((MenuView.ItemView)findViewById(R.id.action_favorite)).setIcon(getDrawable(R.drawable.ic_favorite_border_white_24dp));
 		} else {
 			new FavoritesHelper(this).saveFavorite(weatherBundle.getString("location"), weatherBundle.getInt("id"));
-			((MenuView.ItemView)findViewById(R.id.action_favorite)).setIcon(getDrawable(R.drawable.ic_favorite_black_24dp));
+			((MenuView.ItemView)findViewById(R.id.action_favorite)).setIcon(getDrawable(R.drawable.ic_favorite_white_24dp));
 		}
 	}
 
