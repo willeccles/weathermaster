@@ -74,9 +74,11 @@ public class DetailActivity extends AppCompatActivity {
 		if (isFavorite) {
 			new FavoritesHelper(this).removeFavorite(weatherBundle.getString("location"), weatherBundle.getInt("id"));
 			((MenuView.ItemView)findViewById(R.id.action_favorite)).setIcon(getDrawable(R.drawable.ic_favorite_border_white_24dp));
+			isFavorite = false;
 		} else {
 			new FavoritesHelper(this).saveFavorite(weatherBundle.getString("location"), weatherBundle.getInt("id"));
 			((MenuView.ItemView)findViewById(R.id.action_favorite)).setIcon(getDrawable(R.drawable.ic_favorite_white_24dp));
+			isFavorite = true;
 		}
 	}
 

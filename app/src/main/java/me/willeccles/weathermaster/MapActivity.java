@@ -166,7 +166,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 	public void onMapLongClick(LatLng latLng) {
 		map.clear();
 		MarkerOptions options = new MarkerOptions().title("Custom Location")
-				.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_place_red_36dp))
+				//.icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_place_red_36dp))
 				.anchor(0.5f, 1f);
 		options.position(latLng);
 		map.addMarker(options);
