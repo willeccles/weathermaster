@@ -39,7 +39,7 @@ public class FavoritesHelper extends SQLiteOpenHelper {
 	//adds the data by taking the values and putting them into the database
 	public boolean saveFavorite(String name, int cityID) {
 		SQLiteDatabase db = this.getWritableDatabase();
-		Cursor prevdata = db.rawQuery(String.format("SELECT ID _id,* FROM %s WHERE %s='%s' OR %s=%d;", TABLE_NAME, COL2, DatabaseUtils.sqlEscapeString(name), COL3, cityID), null);
+		Cursor prevdata = db.rawQuery(String.format("SELECT ID _id,* FROM %s WHERE %s=%s OR %s=%d;", TABLE_NAME, COL2, DatabaseUtils.sqlEscapeString(name), COL3, cityID), null);
 		if (prevdata.getCount() != 0) return false;
 		ContentValues contentValues = new ContentValues();
 		contentValues.put(COL2, name);

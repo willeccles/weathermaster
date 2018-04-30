@@ -68,9 +68,9 @@ public class DetailActivity extends AppCompatActivity {
 		shareIntent.setAction(Intent.ACTION_SEND);
 		String shareStr;
 		if (weatherBundle.getInt(TYPE) == CURRENT) {
-			shareStr = String.format("It's %.1fº in %s right now!", weatherBundle.getDouble("temp"), weatherBundle.getString("location"));
+			shareStr = String.format("It's %.1fº in %s right now!", WeatherWorker.convertTemp(this, weatherBundle.getDouble("temp")), weatherBundle.getString("location"));
 		} else {
-			shareStr = String.format("In %s today, the low will be %.1fº and the high will be %.1fº!", weatherBundle.getBundle("day0").getString("location"), weatherBundle.getBundle("day0").getDouble("temp_min"), weatherBundle.getBundle("day0").getDouble("temp_max"));
+			shareStr = String.format("In %s today, the low will be %.1fº and the high will be %.1fº!", weatherBundle.getString("location"), WeatherWorker.convertTemp(this, weatherBundle.getBundle("day0").getDouble("temp_min")), WeatherWorker.convertTemp(this, weatherBundle.getBundle("day0").getDouble("temp_max")));
 		}
 		shareIntent.putExtra(Intent.EXTRA_TEXT, shareStr);
 		shareIntent.setType("text/plain");
