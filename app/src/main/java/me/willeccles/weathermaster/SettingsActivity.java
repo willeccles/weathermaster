@@ -44,13 +44,15 @@ public class SettingsActivity extends AppCompatActivity {
 		}
 	}
 
-	protected void tempRadioClicked(View v) {
+	public void tempRadioClicked(View v) {
 		RadioGroup rg = findViewById(R.id.radioGroup);
 		if (rg.getCheckedRadioButtonId() == R.id.fahrenheitButton && lastTempPref == WeatherWorker.C) {
+			lastTempPref = WeatherWorker.F;
 			SharedPreferences.Editor editor = sharedPrefs.edit();
 			editor.putInt(getString(R.string.unitPrefKey), WeatherWorker.F);
 			editor.apply();
 		} else if (rg.getCheckedRadioButtonId() == R.id.celsiusButton && lastTempPref == WeatherWorker.F) {
+			lastTempPref = WeatherWorker.C;
 			SharedPreferences.Editor editor = sharedPrefs.edit();
 			editor.putInt(getString(R.string.unitPrefKey), WeatherWorker.C);
 			editor.apply();
@@ -59,13 +61,15 @@ public class SettingsActivity extends AppCompatActivity {
 		}
 	}
 
-	protected void mapDoneRadioClicked(View v) {
+	public void mapDoneRadioClicked(View v) {
 		RadioGroup rg = findViewById(R.id.mapOptionRadioGroup);
 		if (rg.getCheckedRadioButtonId() == R.id.mapCurrentOption && lastMapDonePref == MAP_FORECAST) {
+			lastMapDonePref = MAP_CURRENT;
 			SharedPreferences.Editor editor = sharedPrefs.edit();
 			editor.putInt(getString(R.string.map_done_pref_name), MAP_CURRENT);
 			editor.apply();
 		} else if (rg.getCheckedRadioButtonId() == R.id.mapForecastOption && lastMapDonePref == MAP_CURRENT) {
+			lastMapDonePref = MAP_FORECAST;
 			SharedPreferences.Editor editor = sharedPrefs.edit();
 			editor.putInt(getString(R.string.map_done_pref_name), MAP_FORECAST);
 			editor.apply();
