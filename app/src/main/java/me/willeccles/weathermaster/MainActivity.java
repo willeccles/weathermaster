@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity {
 	}
 
 	// when either of the weather buttons is pressed (since they are similar enough to warrant having the same callback)
-	protected void weatherButtonPressed(View v) {
+	public void weatherButtonPressed(View v) {
 		String city = ((TextView)findViewById(R.id.cityName)).getText().toString().trim();
 		String zip = ((TextView)findViewById(R.id.zipCode)).getText().toString().trim();
 		switch (v.getId()) {

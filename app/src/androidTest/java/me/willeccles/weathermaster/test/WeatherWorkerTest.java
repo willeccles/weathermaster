@@ -23,11 +23,11 @@ public class WeatherWorkerTest {
 
 	@Test
 	public void kelvinToC() throws Exception {
-		assertEquals(0.0, WeatherWorker.kelvinToC(273.15));
+		assertEquals(0.0, WeatherWorker.kelvinToC(273.15), 0.001);
 	}
 
 	@Test
 	public void kelvinToF() throws Exception {
-		assertEquals(32.0, WeatherWorker.kelvinToF(273.15));
+		assertEquals(32.0, WeatherWorker.kelvinToF(273.15), 0.001);
 	}
 }

@@ -1,5 +1,6 @@
 package me.willeccles.weathermaster;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
@@ -16,10 +17,13 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static android.support.test.InstrumentationRegistry.getTargetContext;
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.assertion.ViewAssertions.matches;
+import static android.support.test.espresso.intent.Intents.intended;
+import static android.support.test.espresso.intent.matcher.IntentMatchers.hasComponent;
 import static android.support.test.espresso.matcher.ViewMatchers.*;
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
@@ -30,10 +34,10 @@ import static org.junit.Assert.*;
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
 @RunWith(AndroidJUnit4.class)
-public class ExampleInstrumentedTest {
+public class WeatherMasterInstrumentedTest {
 	@Before
 	public void setup() {
-		Context appContext = InstrumentationRegistry.getTargetContext();
+		Context appContext = getTargetContext();
 		Intent i = new Intent(appContext, MainActivity.class);
 		appContext.startActivity(i);
 	}
@@ -41,7 +45,7 @@ public class ExampleInstrumentedTest {
 	@Test
 	public void useAppContext() throws Exception {
 		// Context of the app under test.
-		Context appContext = InstrumentationRegistry.getTargetContext();
+		Context appContext = getTargetContext();
 
 		assertEquals("me.willeccles.weathermaster", appContext.getPackageName());
 	}
@@ -54,8 +58,7 @@ public class ExampleInstrumentedTest {
 	}
 
 	// for matching the text in a toolbar
-	private static Matcher<Object> withToolbarTitle(
-			final Matcher<String> textMatcher) {
+	private static Matcher<Object> withToolbarTitle(final Matcher<String> textMatcher) {
 		return new BoundedMatcher<Object, Toolbar>(Toolbar.class) {
 			@Override public boolean matchesSafely(Toolbar toolbar) {
 				return textMatcher.matches(toolbar.getTitle());
