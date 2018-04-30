@@ -1,6 +1,7 @@
 package me.willeccles.weathermaster;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.espresso.Espresso;
 import android.support.test.espresso.Espresso.*;
@@ -11,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -29,6 +31,13 @@ import static org.junit.Assert.*;
  */
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
+	@Before
+	public void setup() {
+		Context appContext = InstrumentationRegistry.getTargetContext();
+		Intent i = new Intent(appContext, MainActivity.class);
+		appContext.startActivity(i);
+	}
+
 	@Test
 	public void useAppContext() throws Exception {
 		// Context of the app under test.
